@@ -2,17 +2,15 @@
 
 set -eux
 
-pan () { pandoc "$1" -s -o "${1%.org}.md"; }
+# Build slides.
+./build.sh "$@"
 
-# For each org slide:
-#  - create markdown
-#  - create markdown on file change
-for f in slides/*.org; do
-    pan "$f" 
-    when-changed "$f" pan "$f" &
+# Build slides on file change.
+for f in "$@"; do
+    when-changed "$f" ./pan.sh "$f" &
 done
 
-# Kill all spawned processes (file watchers) on exit.
+# Kill all child processes (file watchers) on exit.
 trap "kill -- -$$" SIGINT SIGTERM EXIT
 
 # Start revealJS server.
