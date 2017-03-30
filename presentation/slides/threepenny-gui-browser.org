@@ -1,0 +1,10 @@
+** Threepenny-gui
+
+Uses the browser as a display.
+
+Haskell informs browser how to behave.
+
+Browser informs Haskell of events.
+
+note:
+

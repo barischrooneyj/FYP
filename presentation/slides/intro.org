@@ -1,1 +1,14 @@
-* GUI Support for UTP2
+** GUI Support for UTP2
+
+Supervised by: Andrew Butterfield
+
+note:
+
+Theorem Proving Assistant for Unifying Theories of Programming.
+
+Providing a GUI for UTP2.
+
+Written in Haskell.
+
+The project largely involved the investigation of Threepenny-gui.
+ 

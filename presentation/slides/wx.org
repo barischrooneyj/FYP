@@ -1,0 +1,19 @@
+** WxHaskell
+
+Wrapper around WxWidgets.
+
+Not in Stack.
+
+Requires non-Haskell dependencies.
+
+Steep learning curve.
+
+note:
+
+Built on top of WxWidgets (formerly WxWindows) — a comprehensive C++ library
+that is portable across all major GUI platforms; including GTK, Windows, and
+macOS.
+
+What is Stack?
+
+Cabal hell.

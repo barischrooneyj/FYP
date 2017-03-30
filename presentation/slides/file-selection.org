@@ -1,0 +1,17 @@
+*** File Selection
+
+Limiting factor of browser security features.
+
+Server doesn't receive full file name.
+
+#+BEGIN_SRC Haskell
+input <- UI.input # set UI.type "file"
+on UI.valueChange input $ \path ->
+  liftIO $ putStrLn path
+#+END_SRC
+
+#+BEGIN_SRC Bash
+C://fakepath/somefile.txt
+#+END_SRC
+
+note:

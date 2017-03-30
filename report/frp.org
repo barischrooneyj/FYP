@@ -50,8 +50,8 @@ textEl    <- UI.div
 -- The current workspace over time.
 workspace <- eWorkspaceBehavior <$> ask
 -- A textual representation of the current workspace.
-let text =
-  maybe "No workspace selected" (\w -> "Workspace: " ++ show w) <$> workspace
+let text = maybe "No workspace selected"
+  (\w -> "Workspace: " ++ show w) <$> workspace
 element textEl # sink UI.text text
 #+END_SRC
 
