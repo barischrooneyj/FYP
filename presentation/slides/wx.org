@@ -1,10 +1,10 @@
-** WxHaskell
+*** WxHaskell
 
 Wrapper around WxWidgets.
 
 Not in Stack.
 
-Requires non-Haskell dependencies.
+Non-Haskell dependencies.
 
 Steep learning curve.
 

@@ -1,9 +1,0 @@
-** Threepenny-gui
-
-Full power of modern web dev.
-
-In Stack.
-
-No non-Haskell dependencies.
-
-Easy learning curve.

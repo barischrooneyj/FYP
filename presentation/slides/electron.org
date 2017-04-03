@@ -1,1 +1,146 @@
-* Electron
+*** Electron Integration
+
+[[https://github.com/HeinrichApfelmus/threepenny-gui/issues/111][Issue #111]]
+
+#+BEGIN_QUOTE
+"Use http://electron.atom.io to make standalone applications"
+#+END_QUOTE
+
+note:
+
+Packaged apps that run natively.
+
+---
+
+*** Electron Integration
+
+#+BEGIN_QUOTE
+"I'm thinking of something similar to cabal-macosx."
+
+-- Heinrich Apfelmus
+#+END_QUOTE
+
+---
+
+*** Electron Integration
+
+Haskell as parent process.
+
+Spawn Electron when server is accepting connections.
+
+---
+
+*** Haskell as Parent
+
+Problem when shutting down.
+
+1. Red 'x' clicked.
+2. Need to signal Haskell.
+3. Requires modifying Threepenny-gui server.
+
+note:
+
+Require endpoint to receive kill signal.
+
+Killing Haskell first is fine.
+
+---
+
+*** Haskell as Parent
+
+Really not so hard..
+
+..but there's a better way.
+
+---
+
+*** Electron as Parent
+
+1. Start Electron main process.
+2. Spawn Haskell server.
+3. Electron waits until server is accepting connections.
+4. Electron starts renderer process.
+
+---
+
+*** Electron as Parent
+
+Now shutting down:
+
+1. Red 'x' clicked.
+2. Electron process quits, and since Haskell is a child process, it does too.
+
+~ctr c~ twice in terminal to kill.
+
+---
+
+*** Electron as Parent
+
+[[https://github.com/HeinrichApfelmus/threepenny-gui/pull/169][Pull Request 169]]
+
+How to run and package Threepenny apps with [[https://electron.atom.io][Electron]] and [[https://github.com/electron-userland/electron-packager#electron-packager][Electron Packager]].
+
+Includes a NodeJS script that:
+
+1. Selects a free port to run on.
+2. Executes our Haskell binary, passing the port to run on as an argument.
+3. Waits for Threepenny's server to start accepting connections.
+4. Opens an Electron window which loads the URL of our Threepenny app.
+
+--
+
+*** Electron as Parent
+
+Selects a free port to run on.
+
+#+BEGIN_SRC Javascript
+// Assign a random port to run on.
+freeport((err, port) => {
+  if (err) throw err;
+
+  const url = `http://localhost:${port}`;
+...
+#+END_SRC
+
+--
+
+*** Electron as Parent
+
+Executes our Haskell binary, passing the port to run on as an argument.
+
+#+BEGIN_SRC Javascript
+...
+// Assign a random port to run on.
+freeport((err, port) => {
+  if (err) throw err;
+
+  const url = `http://localhost:${port}`;
+...
+#+END_SRC
+
+--
+
+*** Electron as Parent
+
+Selects a free port to run on.
+
+#+BEGIN_SRC Javascript
+...
+...
+#+END_SRC
+
+--
+
+*** Electron as Parent
+
+Selects a free port to run on.
+Waits for Threepenny's server to start accepting connections.d
+
+#+BEGIN_SRC Javascript
+// Assign a random port to run on.
+freeport((err, port) => {
+  if (err) throw err;
+
+  const url = `http://localhost:${port}`;
+...
+#+END_SRC

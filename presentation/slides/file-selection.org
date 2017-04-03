@@ -1,8 +1,18 @@
 *** File Selection
 
-Limiting factor of browser security features.
-
 Server doesn't receive full file name.
+
+Limited by browser security features.
+
+note:
+
+Only receives a file object/contents and file name.
+
+Can't be exposing the client's file system.
+
+---
+
+*** File Selection
 
 #+BEGIN_SRC Haskell
 input <- UI.input # set UI.type "file"
@@ -14,4 +24,33 @@ on UI.valueChange input $ \path ->
 C://fakepath/somefile.txt
 #+END_SRC
 
+---
+
+*** Electron
+
+Runs a local Chromium instance.
+
+Security features removed.
+
+Additional APIs for native OS features.
+
 note:
+
+Slack and Atom built with Electron.
+
+Performance of Atom.
+
+---
+
+*** File Selection
+
+#+BEGIN_SRC Haskell
+input <- UI.input # set UI.type "file"
+on UI.valueChange input $ \path ->
+  liftIO $ putStrLn path
+#+END_SRC
+
+#+BEGIN_SRC Bash
+/Users/jeremy/Desktop/somefile.txt
+#+END_SRC
+

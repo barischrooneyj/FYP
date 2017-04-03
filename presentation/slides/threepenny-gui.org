@@ -1,1 +1,144 @@
-* Threepenny-gui
+*** Threepenny-gui
+
+Full power of modern web dev.
+
+In Stack.
+
+Only Haskell dependencies.
+
+Easy learning curve.
+
+note:
+
+Why full power of web dev.
+
+Wasn't in Stack when began.
+
+---
+
+*** Threepenny-gui
+
+Modern.
+
+Maintained.
+
+Maintainable.
+
+note:
+
+Version 0.1 in July 2013.
+
+Current version 0.7.
+
+Heinrich Apfelmus known for reactive-banana.
+
+Simple idea.
+
+---
+
+*** Threepenny-gui
+
+Uses the browser as a display.
+
+Haskell informs browser how to build DOM.
+
+Browser informs Haskell of events.
+
+note:
+
+Updates batched for performance.
+
+Latency only viable for local applications.
+
+---
+
+*** Threepenny-gui
+
+[[../images/run-ui.svg]]
+
+---
+
+*** Threepenny-gui
+
+#+BEGIN_SRC Haskell
+import qualified Graphics.UI.Threepenny      as UI
+import           Graphics.UI.Threepenny.Core
+
+main = startGUI defaultConfig app
+
+app window = void $ do
+  button <- UI.button # set UI.text "Click me!"
+  getBody window #+ [element button]
+  on UI.click button $ const $ do
+    element button # set UI.text "I have been clicked!"
+#+END_SRC
+
+--
+
+*** Serve HTML
+
+#+BEGIN_SRC HTML
+...
+<script src="haskell.js"></script>
+<script type="text/javascript" charset="utf-8">
+  Haskell.initFFI();
+</script>
+...
+#+END_SRC
+
+-- 
+
+*** Connect
+
+#+BEGIN_SRC Javascript
+// Initialize connection to server.
+connection = Haskell.createWebSocket(url, receive);
+#+END_SRC
+
+-- 
+
+*** Run UI
+
+#+BEGIN_SRC Haskell
+...
+button <- UI.button # set UI.text "Click me!"
+getBody window #+ [element button]
+on UI.click button $ const $ do
+...
+#+END_SRC
+
+note:
+
+Register event handler. Inform Browser that when 'button' emits a 'click' that
+the 'const $ ...' function should run. A unique identifier is sent to the
+browser, identifying this function.
+
+--
+
+*** On Event
+
+#+BEGIN_SRC Javascript
+...
+Haskell.bind = function (el, eventType, fun) {
+...
+#+END_SRC
+
+note:
+
+Whenever an event of 'eventType' is emitted by 'el' inform Haskell to run the
+function identified by 'fun'.
+
+--
+
+*** Run UI
+
+#+BEGIN_SRC Haskell
+...
+element button # set UI.text "I have been clicked!"
+...
+#+END_SRC
+
+note:
+
+The identified function is run.
+
