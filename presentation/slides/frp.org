@@ -67,6 +67,12 @@ on UI.valuechange selector $ \workspace ->
   emit $ Just workspace
 #+END_SRC
 
+note:
+
+How events are caught.
+
+Global functions.
+
 ---
 
 *** Abstract GUI
