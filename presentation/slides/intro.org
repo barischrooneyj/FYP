@@ -11,4 +11,6 @@ Providing a GUI for UTP2.
 Written in Haskell.
 
 The project largely involved the investigation of Threepenny-gui.
+
+Coding FYP rather than research FYP, so will look at code.
  

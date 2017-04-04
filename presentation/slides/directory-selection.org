@@ -1,0 +1,102 @@
+*** Directory Selection 
+
+File selection done, so should be easy..
+
+---
+
+*** Directory Selection
+
+#+BEGIN_SRC
+<input type="file" webkitdirectory>
+#+END_SRC
+
+note:
+
+Only supported by Chromium.
+
+---
+
+*** Directory Selection
+
+#+BEGIN_SRC Haskell
+UI.input # set UI.type_ "file" # set UI.webkitdirectory
+#+END_SRC
+
+#+BEGIN_SRC Bash
+Not in scope: ‘UI.webkitdirectory’
+Module ‘Graphics.UI.Threepenny’ does not export ‘webkitdirectory’.
+#+END_SRC
+
+---
+
+*** Directory Selection
+
+..and Threepenny-gui doesn't let us write custom attributes.
+
+😞
+
+note:
+
+Even though the attribute is mostly copied from the ~html~ package which does
+allow it.
+
+---
+
+*** Directory Selection
+
+Opened [[https://github.com/HeinrichApfelmus/threepenny-gui/issues/170][Issue #170]]
+
+Using a fork of Threepenny-gui which allows custom attributes.
+
+note:
+
+No response to issue.
+
+---
+
+*** Threepenny-gui's Future
+
+[[https://github.com/HeinrichApfelmus/threepenny-gui/issues/98][Issue #98]]
+
+#+BEGIN_QUOTE
+"It is supposed to be a GUI-ish module, but to be using it, one has to know and
+use HTML."
+
+-- yuvallanger
+#+END_QUOTE
+
+---
+
+*** Threepenny-gui's Future
+
+#+BEGIN_QUOTE
+"The intention is indeed to hide HTML at some point, replacing it with a
+declarative language for specifying GUI layout. A very first step in this
+direction are the existing table, column and row combinators."
+
+-- Heinrich Apfelmus
+#+END_QUOTE
+
+---
+
+*** Threepenny-gui's Future
+
+Previously highlighted Threepenny-gui's *maintainability*.
+
+#+BEGIN_QUOTE
+"intention is indeed to hide HTML at some"
+
+-- Heinrich Apfelmus
+#+END_QUOTE
+
+---
+
+*** Threepenny-gui's Future
+
+#+BEGIN_QUOTE
+"Note that HTML/CSS does offer good support for paragraph formatting and text
+layout, at least it's far better than what native GUI frameworks currently
+offer."
+
+-- Heinrich Apfelmus
+#+END_QUOTE

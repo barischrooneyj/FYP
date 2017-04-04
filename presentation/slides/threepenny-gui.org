@@ -61,11 +61,6 @@ Latency only viable for local applications.
 *** Threepenny-gui
 
 #+BEGIN_SRC Haskell
-import qualified Graphics.UI.Threepenny      as UI
-import           Graphics.UI.Threepenny.Core
-
-main = startGUI defaultConfig app
-
 app window = void $ do
   button <- UI.button # set UI.text "Click me!"
   getBody window #+ [element button]

@@ -6,10 +6,6 @@
 "Use http://electron.atom.io to make standalone applications"
 #+END_QUOTE
 
-note:
-
-Packaged apps that run natively.
-
 ---
 
 *** Electron Integration
@@ -22,39 +18,21 @@ Packaged apps that run natively.
 
 ---
 
-*** Electron Integration
+*** Haskell as Parent Process
 
-Haskell as parent process.
-
-Spawn Electron when server is accepting connections.
-
----
-
-*** Haskell as Parent
-
-Problem when shutting down.
-
-1. Red 'x' clicked.
-2. Need to signal Haskell.
-3. Requires modifying Threepenny-gui server.
+Server wont shutdown on GUI exit.
 
 note:
 
-Require endpoint to receive kill signal.
+Because it's a child process.
 
-Killing Haskell first is fine.
+Need to signal Threepenny-gui server.
 
----
-
-*** Haskell as Parent
-
-Really not so hard..
-
-..but there's a better way.
+Requires modifying Threepenny-gui source.
 
 ---
 
-*** Electron as Parent
+*** Electron as Parent Process
 
 1. Start Electron main process.
 2. Spawn Haskell server.
@@ -63,84 +41,56 @@ Really not so hard..
 
 ---
 
-*** Electron as Parent
+*** Electron as Parent Process
 
-Now shutting down:
+Server will shutdown on GUI exit.
 
-1. Red 'x' clicked.
-2. Electron process quits, and since Haskell is a child process, it does too.
+note:
 
-~ctr c~ twice in terminal to kill.
+ ~Ctrl C~ twice in terminal to kill.
 
 ---
 
-*** Electron as Parent
+*** Electron Integration
 
-[[https://github.com/HeinrichApfelmus/threepenny-gui/pull/169][Pull Request 169]]
+[[https://github.com/HeinrichApfelmus/threepenny-gui/pull/169][Pull Request #169]]
 
-How to run and package Threepenny apps with [[https://electron.atom.io][Electron]] and [[https://github.com/electron-userland/electron-packager#electron-packager][Electron Packager]].
+#+BEGIN_QUOTE
+"How to run and package Threepenny-gui apps with [[https://electron.atom.io][Electron]] and [[https://github.com/electron-userland/electron-packager#electron-packager][Electron Packager]]."
+#+END_QUOTE
 
-Includes a NodeJS script that:
+# ---
 
-1. Selects a free port to run on.
-2. Executes our Haskell binary, passing the port to run on as an argument.
-3. Waits for Threepenny's server to start accepting connections.
-4. Opens an Electron window which loads the URL of our Threepenny app.
+# *** Electron as Parent
 
---
+# Electron main process:
 
-*** Electron as Parent
+# 1. Selects a free port to run on.
+# 2. Executes our Haskell binary, passing the port to run on as an argument.
+# 3. Waits for Threepenny's server to start accepting connections.
+# 4. Opens an Electron renderer process, loading the URL of our Threepenny app.
 
-Selects a free port to run on.
+---
 
-#+BEGIN_SRC Javascript
-// Assign a random port to run on.
-freeport((err, port) => {
-  if (err) throw err;
+*** Electron Integration
 
-  const url = `http://localhost:${port}`;
-...
-#+END_SRC
+#+BEGIN_QUOTE
+"This looks very useful, thank you!"
 
---
+"Could you change your pull request so that the executable is automatically
+built and copied to the right location when building a package?"
 
-*** Electron as Parent
+-- Heinrich Apfelmus
+#+END_QUOTE
 
-Executes our Haskell binary, passing the port to run on as an argument.
+---
 
-#+BEGIN_SRC Javascript
-...
-// Assign a random port to run on.
-freeport((err, port) => {
-  if (err) throw err;
+*** Electron Packager
 
-  const url = `http://localhost:${port}`;
-...
-#+END_SRC
+Package as native OS app.
 
---
+[[../images/icon.png]]
 
-*** Electron as Parent
+note:
 
-Selects a free port to run on.
-
-#+BEGIN_SRC Javascript
-...
-...
-#+END_SRC
-
---
-
-*** Electron as Parent
-
-Selects a free port to run on.
-Waits for Threepenny's server to start accepting connections.d
-
-#+BEGIN_SRC Javascript
-// Assign a random port to run on.
-freeport((err, port) => {
-  if (err) throw err;
-
-  const url = `http://localhost:${port}`;
-...
-#+END_SRC
+Pull Request also includes Electron Packager guide.

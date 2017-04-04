@@ -1,0 +1,13 @@
+*** What's Next?
+
+Report
+
+Threepenny-gui-contextmenu bug fixes
+
+More integrations with UTP2 backend
+
+Complex GUI bits with mocked integrations
+
+---
+
+*** Thank You!

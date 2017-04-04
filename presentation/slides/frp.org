@@ -1,1 +1,120 @@
-* Functional Reactive Programming
+*** Functional Reactive Programming (FRP)
+
+Data that changes over time.
+
+GUI written in terms of *present* value of data.
+
+#+BEGIN_QUOTE
+"FRP specifies the whole dynamic behavior at the time of declaration"
+
+-- Heinrich Apfelmus
+#+END_QUOTE
+
+note:
+
+Not knowing what that present value is.
+
+---
+
+*** Events
+
+Events will occur, changing data over data.
+
+Events such as user interactions.
+
+[[../images/frp-event.png]]
+
+---
+
+*** Behaviors
+
+[[../images/frp-behavior.png]]
+
+---
+
+*** FRP
+
+Might *not* have an initial value.
+
+Could represent a path as a ~Maybe String~.
+
+---
+
+*** Imperative Style
+
+#+BEGIN_SRC haskell
+textEl <- UI.div # set UI.text "No workspace selected"
+#+END_SRC
+
+#+BEGIN_SRC haskell
+on UI.valuechange selector $ \workspace ->
+  textEl # set UI.text ("Workspace: " ++ show workspace)
+#+END_SRC
+
+---
+
+*** Reactive Style
+
+#+BEGIN_SRC haskell
+textEl <- UI.div
+let text = maybe "No workspace selected"
+  (\w -> "Workspace: " ++ show w) <$> workspace
+element textEl # sink UI.text text
+#+END_SRC
+
+#+BEGIN_SRC haskell
+on UI.valuechange selector $ \workspace ->
+  emit $ Just workspace
+#+END_SRC
+
+---
+
+*** Abstract GUI
+
+#+BEGIN_SRC Haskell
+class Monad m => GUI m w e | m -> w e where
+  gButton  :: String -> m e
+  gAdd     :: e -> [e] -> m e
+  ...
+#+END_SRC
+
+---
+
+*** Integrating Second GUI
+
+Wx GUI tightly integrated.
+
+Need to abstract away GUI specifics.
+
+---
+
+*** Integrating Second GUI
+
+Wx GUI can synchronously wait for input.
+
+Threepenny-gui can't.
+
+---
+
+*** Wx
+
+[[../images/utp2-wx-home.png]]
+
+---
+
+*** Wx
+
+[[../images/utp2-wx-tabs.png]]
+
+---
+
+*** Wx
+
+[[../images/utp2-electron-workspace.png]]
+
+---
+
+*** Wx
+
+[[../images/utp2-electron-home.png]]
+

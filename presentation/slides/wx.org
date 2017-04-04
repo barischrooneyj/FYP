@@ -6,7 +6,7 @@ Not in Stack.
 
 Non-Haskell dependencies.
 
-Steep learning curve.
+Steep(er) learning curve.
 
 note:
 
@@ -17,3 +17,5 @@ macOS.
 What is Stack?
 
 Cabal hell.
+
+OOP in FRP.

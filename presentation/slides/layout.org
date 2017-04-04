@@ -1,1 +1,108 @@
-* Layout
+*** Layout
+
+Threepenny-gui provides table, column and row combinators.
+
+No responsive layouts.
+
+---
+
+*** Layout
+
+#+BEGIN_QUOTE
+"flexbox layout, which apperas to solve most of the layout woes. Flexboxes may
+be a good start for implementing proper layout combinators in Haskell.
+
+Flexboxes only work in newer browsers, but we could bundle our own browser
+during deployment"
+
+-- Heinrich Apfelmus
+#+END_QUOTE
+
+note:
+
+We are bundling with our own browser.
+
+---
+
+*** Flexbox
+
+#+BEGIN_QUOTE
+"A flex container expands items to fill available free space, or shrinks them to
+prevent overflow."
+
+-- [[https://css-tricks.com/snippets/css/a-guide-to-flexbox/][css-tricks.com]]
+#+END_QUOTE
+
+---
+ 
+*** Flexbox
+
+[[../images/flex-wrap.svg]]
+
+[[../images/align-items.svg]]
+
+note:
+
+Specify properties for parent and children.
+
+Direction agnostic.
+
+Easy vertical centering.
+
+---
+
+*** Threepenny-gui-flexbox
+
+Simplify use of parent and child flexbox properties.
+
+#+BEGIN_SRC Haskell
+flexGrow 1 { cOrder 3 }
+#+END_SRC
+
+[[https://www.stackage.org/lts/package/threepenny-gui-flexbox][In Stack LTS]]
+
+note:
+
+Converts symbols to correct string using the clay package.
+
+---
+
+*** Threepenny-gui-flebox
+
+Integration of full Flexbox API with Threepenny-gui.
+
+#+BEGIN_SRC Haskell
+UI.div # set UI.text "foo" # setFlex (flexGrow 2)
+#+END_SRC
+
+---
+
+*** Threepenny-gui-flexbox
+
+[[../images/flexbox.png]]
+
+# ---
+
+# *** Threepenny-gui-flexbox
+
+# Direct application of Flexbox properties.
+
+# #+BEGIN_SRC Haskell
+# getBody w # setFlex parentProps #+ [
+#     foo # setFlex (flexGrow 1)
+#   , foo # setFlex (flexGrow 2)
+#   , foo # setFlex (flexGrow 1)
+#   ]
+# #+END_SRC
+
+---
+
+*** Threepenny-gui-flexbox
+
+#+BEGIN_SRC Haskell
+flex_p (getBody w) [
+    (foo, flexGrow 1)
+  , (foo, flexGrow 2)
+  , (foo, flexGrow 1)
+  ]
+#+END_SRC

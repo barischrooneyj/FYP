@@ -1,1 +1,102 @@
-* Context Menu
+*** Context Menu
+
+A right-click menu.
+
+note:
+
+Can be opened multiple ways.
+
+---
+
+*** Context Menu
+
+Register handlers for "contextmenu" events.
+
+Threepenny-gui didn't provide this facility❗
+
+note:
+
+This is a real show of Threepenny-gui's youth.
+
+---
+
+*** Context Menu
+
+[[https://github.com/HeinrichApfelmus/threepenny-gui/pull/147][Pull Request #147]]
+
+#+BEGIN_QUOTE
+"Add context menu event"
+#+END_QUOTE
+
+---
+
+*** Context Menu
+
+Haskell receives ~(Int, Int)~.
+
+Coordinates relative to source element, not page.
+
+note:
+
+Could use that, but it's a hack.
+
+---
+
+*** Context Menu
+
+Fork which provides the correct coordinates.
+
+---
+
+*** Threepenny-gui-contextmenu
+
+Nested menus with bound actions.
+
+[[https://github.com/barischj/threepenny-gui-contextmenu][GitHub Repo]]
+
+---
+
+*** Threepenny-gui-contextmenu
+
+[[../images/context-menu.png]]
+
+---
+
+*** Threepenny-gui-contextmenu
+
+#+BEGIN_SRC Haskell
+[ actionMenuItem "red"   [colour el "red" ],
+, actionMenuItem "blue"  [colour el "blue"],
+, nestedMenuItem "more" [
+    actionMenuItem "green" [colour el "green"]
+  ]
+]
+#+END_SRC
+
+---
+
+*** Better Events
+
+JavaScript sends specific data based on event type.
+
+#+BEGIN_SRC Javascript
+// Not used code.
+switch (eventType) {
+  case "contextmenu":
+    return [event.x, event.y]
+#+END_SRC
+
+So, need to edit Threepenny-gui to add a new event?
+
+---
+
+*** Better Threepenny-gui Events
+
+Let's just expose the entire event data.
+
+Designed in [[https://github.com/HeinrichApfelmus/threepenny-gui/issues/167][Issue #167]]
+
+note:
+
+Not implemented because we have right-click menus working.
+
