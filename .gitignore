@@ -1,4 +1,8 @@
+# LaTeX
 *.log
 *.out
 *.pdf
 *.tex
+
+# macOS
+.DS_Store
