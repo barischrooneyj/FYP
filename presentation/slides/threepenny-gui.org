@@ -84,7 +84,7 @@ app window = void $ do
 -- 
 
 *** Connect
-
+    
 #+BEGIN_SRC Javascript
 // Initialize connection to server.
 connection = Haskell.createWebSocket(url, receive);

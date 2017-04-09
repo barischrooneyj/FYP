@@ -1,6 +1,6 @@
 ** GUI Support for UTP2
 
-Supervised by: Andrew Butterfield
+Supervised by: Dr. Andrew Butterfield
 
 note:
 

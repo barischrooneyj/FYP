@@ -1,5 +1,6 @@
 """Watch for file changes and build presentation."""
 
+import glob
 import time
 
 import click
@@ -22,8 +23,9 @@ class _ConvertHandler(FileSystemEventHandler):
 
 
 @click.command()
-@click.option("--path", type=str, default=".", help="Path to watch.")
+@click.option("--path", type=str, default=".", help="Path glob to watch.")
 def _watch(path):
+    [_convert(p) for p in glob.glob(path)]
     observer = Observer()
     observer.schedule(_ConvertHandler(), path, recursive=True)
     observer.start()
