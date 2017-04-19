@@ -1,0 +1,41 @@
+* SCSS Latex-Org
+This is a fork of Stephen Shaw's [[https://github.com/stesh/SCSS-FYP-LaTeX]]
+with the purpose of adapting it for easy use with Emacs org mode.
+
+See [[report.pdf]] for an example of a produced PDF.
+
+** Requirements
+- xelatex
+- emacs
+- org-mode
+
+** Usage
+- Clone the repo :)
+- Add the ~fyp.el~ file to your emacs init file
+- Change your personal info in ~settings/constants.tex~
+- Change the directory in ~fyp.el~ if neccessary
+- Edit your report in ~report.org~
+- Export with ~C-c C-e~
+- Then hit ~l l~ to export to a ~.tex~ file
+
+** Org-ref
+I fully recommend using org-ref to do easy citations.
+
+- Make your bibtex file as normal in the file specified in ~fyp.el~
+- Include the bibtex file in ~report.org~ using ~M-x
+  org-ref-insert-bibliography-link~ (At the end of the file ish)
+- load org-ref ~M-x org-ref~
+- Make citations using ~C-c ]~
+
+** To recompile with bibtex
+Compile the report with the following:
+#+BEGIN_SRC bash
+xetex report.tex
+bibtex report
+xetex report.tex
+#+END_SRC
+
+** Font
+The font is set to "Nimbus Sans L" since Helvetica is hard to get on any kind of
+Linux. Feel free to change back to Helvetica, you may want to on macOS since it
+ships with Helvetica but not "Nimbus Sans L".
