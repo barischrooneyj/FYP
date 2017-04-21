@@ -1,6 +1,7 @@
 # LaTeX
 *.log
 *.out
+*.pdf
 *.tex
 
 # macOS
