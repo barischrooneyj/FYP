@@ -40,16 +40,16 @@ library. \utp{} has been in development since at least March 2010 which is when
 the source originally appears on BitBucket. \utp{} was formerly known as
 Saoithín.
 
-TODO title
-
-\includegraphics{images/existing-utp2-home-screen.png}
-
 WxHaskell is a GUI library for Haskell that was started in July 2003 REF but
 moved to its current repository in January 2007 REF when the project was taken
 over by a new set of maintainers. The goal of the project is to provide an
 "industrial strength GUI library" for Haskell REF. The wxHaskell team attempt to
 do so by building on top of an existing GUI library REF, and thus avoid the
 majority of the burden of developing a GUI library themselves REF.
+
+\begin{center}
+  \includegraphics[scale=0.7]{images/existing-utp2-home-screen.png}
+\end{center}
 
 ** Existing Issues
 *** Object Oriented Concepts
@@ -243,22 +243,21 @@ browser.
 Because \thp{} manages to avoid GUI related dependencies, by using the web
 browser as a display, the pain of installing these dependencies is removed and
 installing \thp{} is easy. At the time \thp{} was chosen it was not in Stack,
-however only one of its dependencies was not in a Stack, a library called
-~warp~. Once a library's entire dependencies are in Stack it is trivial to get
-that library in Stack. Shortly later ~warp~ and subsequently \thp{} were in
-Stack.
+however only one of its dependencies was not in a Stack. Once a library's entire
+dependencies are in Stack it is trivial to get that library in Stack. A few
+weeks after discovering \thp{} it was in the latest Stack resolver.
 
 # Full power of modern web development.
 Because \thp{} uses the web browser as a display, this means that what is being
-rendered to the user is ultimately just HTML, CSS and JavaScript. How \thp{}
-works is that it provides functions to manipulate HTML, it also allows the
-programmer to load CSS and to run JavaScript. How \thp{} works will be explained
-in more detail later on but in essence it is a wrapper around the languages of
-modern web development, this means the full power of modern development can be
-leveraged in a \thp{} application. Another benefit of \thp{} being a wrapper
-around HTML, CSS and JavaScript is that if you are familiar with these web
-development technologies then \thp{} has a relatively gentle learning curve
-compared to other Haskell GUI libraries.
+rendered to the user is ultimately just HTML and CSS. How \thp{} works is that
+it provides functions to write and manipulate HTML, it also allows the
+programmer to load CSS files and to run JavaScript. How \thp{} works will be
+explained in more detail later on but in essence it is a wrapper around the
+languages of modern web development, this means the full power of modern
+development can be leveraged in a \thp{} application. Another benefit of \thp{}
+being a wrapper around HTML, CSS and JavaScript is that if you are familiar with
+these web development technologies then \thp{} has a relatively gentle learning
+curve compared to other Haskell GUI libraries.
 
 # FRP.
 We have mentioned that \thp{} provides high-level abstractions, with a
@@ -276,41 +275,181 @@ created \thp{} to explore the application of FRP to building a GUI.
 \thp{} was chosen for \utp{} because of the above reasons. It is easy to
 install, in stark contrast to wxHaskell. It has a gentle learning curve if you
 are already familiar with web development technologies. Finally, the strong
-focus on FRP within /thp{} promotes writing a GUI in a declarative manner, in a
+focus on FRP within \thp{} promotes writing a GUI in a declarative manner, in a
 style in-line with the functional programming ideology.
 
 # Young, flawed but maintainable.
 While \thp{} has these many benefits it is still a young library and would
 likely have some flaws, which would later be confirmed. \thp{} was only started
 in July 2013 and at the current time of writing is on version 0.7.1. However,
-for a functioning GUI library it has quite a small code base which would make it
-easier to get involved with \thp{} to find solutions to these flaws. The small
-code base also means that \thp{} is very maintainable which is vital for its
-longevity. Part of the reason for the small code base is the fact that \thp{}
-leverages the power of existing web development technologies, letting these
-existing and widely prevalent technologies do the heavy lifting.
+for a functioning GUI library \thp{} has quite a small code base which makes it
+easier to get involved and find solutions to these flaws. The small code base
+also means that \thp{} is very maintainable which is vital for its longevity.
+Part of the reason for the small code base is the fact that \thp{} leverages the
+power of existing web development technologies, letting these existing and
+widely prevalent technologies do the heavy lifting.
 
-* \thp{}
+** \thp{}
 
 *** Introduction
 
 # Reference section.
-As the project progressed flaws of thp{} were discovered and addressed. This
+As the project progressed flaws of \thp{} were discovered and addressed. This
 required making modifications to \thp{}'s source code. In light of this it is
-beneficial to have a deeper understanding of how \thp{} operates. This will make
-understanding \thp{}'s flaws and how they were addressed much easier later on.
+beneficial to have a deeper understanding of how \thp{} operates, which will
+make understanding \thp{}'s flaws and how they were addressed much easier later
+on. This chapter provides an overview of how \thp{} operates and then provides
+an in-depth walk-through of a small \thp{} application.
 
 *** Overview 
 
 # Browser as a display.
+\thp{} uses the web browser as a display. This means that a user views a \thp{}
+application in their browser, and what is rendered in their browser is HTML and
+CSS, which can be manipulated by JavaScript. To solidify this idea that a \thp{}
+application is ultimately HTML and CSS the screenshot below shows a simple
+\thp{} application being displayed in a web browser. The web browser's developer
+tools are open to show the HTML structure of the application.
 
-# 
+# TODO Screenshot
+
+# Manipulations by JavaScript.
+The screenshot above shows how a \thp{} application consists of HTML. However it
+only shows a static view of the application and applications generally need to
+be dynamic; the displayed HTML needs to be able to change in structure, in
+response to user input for example. These manipulations are done in the browser
+by JavaScript. Any \thp{} code which manipulates HTML is converted from Haskell
+to JavaScript and evaluated in the web browser. For example we might want to
+append a list item ~<li>~ with text "Ferrari" to a list ~<ul>~ of car names, and
+have written the appropriate Haskell code (below). At runtime this Haskell code
+is converted to JavaScript and evaluated in the browser.
+
+#+BEGIN_SRC Haskell
+UI.ul #+ [UI.li # set UI.text "Ferrari"]
+#+END_SRC
+*Appending to a list in \thp{}*
+
+# Event loop.
+So far we have covered the ideas that \thp{} applications are displayed as HTML
+and CSS in a web browser, and that manipulations occur by converting Haskell
+code to JavaScript and evaluating it in the web browser. One important question
+is how a \thp{} application knows when to apply the manipulations, when to
+evaluate the JavaScript? For example we might only want the colour of a HTML
+element to change when the user presses a specific button, in this case we are
+waiting for input from the user and once that input is received JavaScript is
+evaluated. Wherever our \thp{} application is interested in a certain event,
+such as a user pressing a button, interest in that event is registered with the
+web browser which is displaying the application. Whenever the event occurs in
+the browser, the \thp{} application is informed and may send additional
+JavaScript code to the browser to be evaluated.
 
 *** Walkthrough
 
+# Overview.
+We now have an overview of how a \thp{} application is displayed in the browser,
+including conversion to JavaScript code and how browser events such as button
+clicks are handled. We will now look at the life-cycle of a \thp{} in more
+detail, by looking at a minimal working \thp{} application. While working our
+way through the application we will be referring to the image below which
+describes the life-cycle of a \thp{} application.
+
+\begin{center}
+  \includegraphics[scale=0.15]{images/threepenny-run-ui.png}
+\end{center}
+
+*Life-cycle of a \thp{} Application*
+
+# The minimal application.
+The Haskell code of the \thp{} application we are looking at is below. In
+particular we are concerned with the four lines of the body of the function
+~app~. The remaining code is boilerplate to achieve a full working application.
+The first line of ~app~ creates a button with text "Click me!". In the second
+line we attach that button to the HTML ~<body>~.
+
+# TERM boilerplate
+
+#+BEGIN_SRC Haskell
+module Main where
+
+import qualified Graphics.UI.Threepenny      as UI
+import           Graphics.UI.Threepenny.Core
+
+main = startGUI defaultConfig app
+
+app window = do
+  button <- UI.button # set UI.text "Click me!"
+  getBody window #+ [element button]
+  on UI.click button $ const $
+    element button # set UI.text "I have been clicked!"
+#+END_SRC
+
+We have described the application code at a high-level, now we will look in more
+detail at what occurs at runtime. When we execute the compiled code a local HTTP
+server is started, the server serves at the address ~localhost:8000~ by default.
+We can visit this address in our browser to view the \thp{} application. When we
+visit ~localhost:8000~ in our browser a HTTP GET request is sent to the server
+and the server responds with some HTML. This corresponds to the first two arrows
+in our life cycle diagram.
+
+Included in the HTML is some JavaScript which is evaluated in the browser and
+opens a connection to the server. This is the third arrow in our life cycle
+diagram. The type of connection opened is called a WebSocket connection and it
+stays open until the user closes their browser tab. The benefit of maintaining
+an open connection between the server and the browser is that the server can
+send data to the browser whenever it wants to, this means the server can update
+what is being displayed at any time. For example we might want to set a button
+to a red colour after a timer expires. Because a WebSocket connection is open,
+the server can send JavaScript code to the browser when the timer expires, this
+JavaScript code is evaluated in the browser and sets the button to a red colour.
+To further see why maintaining an open connection is important we can consider
+the alternative. In a traditional web application the browser sends HTTP
+requests to the server and the server responds, the server can only send data to
+the browser in response to a browser's HTTP request. Considering our timer
+example, for the browser to colour the button red when the timer expires the
+browser would have to be polling the server.
+
+Continuing with our example application, once the WebSocket connection has been
+opened our \thp{} application code is evaluated, this corresponds with the
+fourth arrow in our life cycle diagram. In the second line of ~app~, JavaScript
+code is sent from the server to the browser to be evaluated, this code adds the
+button element from the first line to the HTML ~<body>~. In the third line the
+server tells the browser that it should be informed of any clicks on the button.
+
+Finally we will consider the loop in the life cycle diagram. The browser informs
+the server whenever the button click event occurs, this corresponds to the fifth
+arrow in the life cycle diagram. When the server receives this information the
+fourth line of ~app~ is run, sending JavaScript code to the browser to change
+the buttons text to "I have been clicked!" which corresponds to the final arrow
+of the life cycle diagram. This event loop will continue until either the user
+closes the browser tab or the server is killed.
+
 * Implementation
 
+** A Right-Click Menu
+   
+** Layout Combinators
+
+** File Selection
+   
+** Electron
+
+** Electron Packager
+
+** Directory Selection
+
+** Functional Reactive Programming
+
+** Abstract GUI Layer
+
+** Conflicting Architectures
+   
+** Web Development Libraries
+
 * Reflections
+
+** Edit-Compile-Evaluate
+
+** Conclusion
 
 \insertbibliography
 
