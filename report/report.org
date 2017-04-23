@@ -309,7 +309,8 @@ application in their browser, and what is rendered in their browser is HTML and
 CSS, which can be manipulated by JavaScript. To solidify this idea that a \thp{}
 application is ultimately HTML and CSS the screenshot below shows a simple
 \thp{} application being displayed in a web browser. The web browser's developer
-tools are open to show the HTML structure of the application.
+tools are open to show the HTML structure of the application, which can be seen
+on the right.
 
 # TODO Screenshot
 
@@ -318,11 +319,11 @@ The screenshot above shows how a \thp{} application consists of HTML. However it
 only shows a static view of the application and applications generally need to
 be dynamic; the displayed HTML needs to be able to change in structure, in
 response to user input for example. These manipulations are done in the browser
-by JavaScript. Any \thp{} code which manipulates HTML is converted from Haskell
-to JavaScript and evaluated in the web browser. For example we might want to
-append a list item ~<li>~ with text "Ferrari" to a list ~<ul>~ of car names, and
-have written the appropriate Haskell code (below). At runtime this Haskell code
-is converted to JavaScript and evaluated in the browser.
+by JavaScript. Any \thp{} code which manipulates displayed elements is converted
+from Haskell to JavaScript and evaluated in the web browser. For example we
+might want to append a list item ~<li>~ with text "Ferrari" to a list ~<ul>~ of
+car names, and have written the appropriate Haskell code (below). At runtime
+this Haskell code is converted to JavaScript and evaluated in the browser.
 
 #+BEGIN_SRC Haskell
 UI.ul #+ [UI.li # set UI.text "Ferrari"]
@@ -330,11 +331,11 @@ UI.ul #+ [UI.li # set UI.text "Ferrari"]
 *Appending to a list in \thp{}*
 
 # Event loop.
-So far we have covered the ideas that \thp{} applications are displayed as HTML
-and CSS in a web browser, and that manipulations occur by converting Haskell
-code to JavaScript and evaluating it in the web browser. One important question
-is how a \thp{} application knows when to apply the manipulations, when to
-evaluate the JavaScript? For example we might only want the colour of a HTML
+So far we have covered the ideas that \thp{} applications are displayed using
+HTML and CSS in a web browser, and that manipulations occur by converting
+Haskell code to JavaScript and evaluating it in the web browser. One important
+question is how a \thp{} application knows when to apply the manipulations, when
+to evaluate the JavaScript? For example we might only want the colour of a HTML
 element to change when the user presses a specific button, in this case we are
 waiting for input from the user and once that input is received JavaScript is
 evaluated. Wherever our \thp{} application is interested in a certain event,
@@ -359,12 +360,14 @@ describes the life-cycle of a \thp{} application.
 
 *Life-cycle of a \thp{} Application*
 
-# The minimal application.
+# Overview of minimal application.
 The Haskell code of the \thp{} application we are looking at is below. In
 particular we are concerned with the four lines of the body of the function
 ~app~. The remaining code is boilerplate to achieve a full working application.
 The first line of ~app~ creates a button with text "Click me!". In the second
-line we attach that button to the HTML ~<body>~.
+line we attach that button to the HTML ~<body>~. The third line causes its body
+to be evaluated when a user clicks the button. The fourth line is what is then
+evaluated, it changes the button's text to "I have been clicked!".
 
 # TERM boilerplate
 
@@ -383,31 +386,37 @@ app window = do
     element button # set UI.text "I have been clicked!"
 #+END_SRC
 
+# First two arrows, initial HTML.
 We have described the application code at a high-level, now we will look in more
 detail at what occurs at runtime. When we execute the compiled code a local HTTP
-server is started, the server serves at the address ~localhost:8000~ by default.
-We can visit this address in our browser to view the \thp{} application. When we
-visit ~localhost:8000~ in our browser a HTTP GET request is sent to the server
-and the server responds with some HTML. This corresponds to the first two arrows
-in our life cycle diagram.
+server is started, the server serves our \thp{} application at the address
+~localhost:8000~ by default. We can visit this address in our browser to view
+our \thp{} application. When we visit ~localhost:8000~ in our browser a HTTP GET
+request is sent to the server and the server responds with an HTML file, this
+HTML doesn't yet contain any HTML describing our \thp{} application. This HTTP
+GET request and the response correspond to the first two arrows in our life
+cycle diagram.
 
-Included in the HTML is some JavaScript which is evaluated in the browser and
-opens a connection to the server. This is the third arrow in our life cycle
-diagram. The type of connection opened is called a WebSocket connection and it
-stays open until the user closes their browser tab. The benefit of maintaining
-an open connection between the server and the browser is that the server can
-send data to the browser whenever it wants to, this means the server can update
-what is being displayed at any time. For example we might want to set a button
-to a red colour after a timer expires. Because a WebSocket connection is open,
-the server can send JavaScript code to the browser when the timer expires, this
-JavaScript code is evaluated in the browser and sets the button to a red colour.
-To further see why maintaining an open connection is important we can consider
-the alternative. In a traditional web application the browser sends HTTP
-requests to the server and the server responds, the server can only send data to
-the browser in response to a browser's HTTP request. Considering our timer
-example, for the browser to colour the button red when the timer expires the
-browser would have to be polling the server.
+# Third arrow, WebSocket connection.
+Included in this initial HTML file is some JavaScript which is evaluated in the
+browser, it opens a connection to the server. This is the third arrow in our
+life cycle diagram. The type of connection opened is called a WebSocket
+connection, which stays open until the user closes their browser tab. The
+benefit of maintaining an open connection between the server and the browser is
+that the server can send data to the browser whenever it wants to, this means
+the server can update what is being displayed at any time. For example we might
+want to set a button to a red colour after a timer expires. Because a WebSocket
+connection is open, the server can send JavaScript code to the browser when the
+timer expires, this JavaScript code is evaluated in the browser and sets the
+button to a red colour. To further see why maintaining an open connection is
+important we can consider the traditional alternative to a WebSocket. In a
+traditional web application the browser sends HTTP requests to the server and
+the server responds, the server can only send data to the browser in response to
+a browser's HTTP request. Considering our timer example, for the browser to know
+when the timer has expired the browser would have to be constantly polling the
+server.
 
+# Application evaluation, fourth arrow.
 Continuing with our example application, once the WebSocket connection has been
 opened our \thp{} application code is evaluated, this corresponds with the
 fourth arrow in our life cycle diagram. In the second line of ~app~, JavaScript
@@ -415,6 +424,7 @@ code is sent from the server to the browser to be evaluated, this code adds the
 button element from the first line to the HTML ~<body>~. In the third line the
 server tells the browser that it should be informed of any clicks on the button.
 
+# Event loop.
 Finally we will consider the loop in the life cycle diagram. The browser informs
 the server whenever the button click event occurs, this corresponds to the fifth
 arrow in the life cycle diagram. When the server receives this information the
@@ -426,30 +436,114 @@ closes the browser tab or the server is killed.
 * Implementation
 
 ** A Right-Click Menu
-   
+
+*** Background
+
+# Why right-click menu first.
+Right-click menus are widely used in the existing \utp{} application, below is a
+screenshot showing a right-click menu on the application's home screen. Building
+a right-click menu using \thp{} represented, to some degree, an investigation
+into the feasibility of using \thp{} to build an entire GUI for \utp{}. This is
+because a right-click menu is one of the more complex components of a GUI and
+also because of the widespread use of right-click menus in \utp{}.
+
+# TODO screenshot of right-click menu.
+
+# REF https://html.spec.whatwg.org/multipage/forms.html#context-menus
+
+# Not supported by Threepenny-gui. 
+\thp{} does not provide a facility to build a right-click menu. You might expect
+that a GUI library would provide support for this, since it seems like one of
+the fundamental parts of a GUI. However \thp{}'s approach is different to a
+traditional GUI library, it acts as a wrapper around existing web technologies,
+leveraging their power. This means that building a right-click menu in \thp{}
+instead becomes the problem of building a right-click menu using web
+technologies.
+
+# Right-click menu using web technologies.
+Building a right-click menu using web technologies is not entirely
+straightforward either. There exists a HTML specification for building a
+right-click menu however it is only implemented and enabled by Mozilla's Firefox
+browser. Google's Chrome browser and Apple's Safari have implemented the
+specification however is must be enabled via a developer flag. Microsoft's Edge
+does not support the specification. The HTML specification for building a
+right-click menu only existed as a recommendation by Mozilla at the time of my
+investigation though it was accepted to the HTML Living Standard on January 17
+2017, however browser support is as previously mentioned.
+
+# https://dpogue.ca/articles/html5-menu.html
+
+*** Implementation
+
+# contextmenu event introduction.
+While most browser's do not have enabled support for right-click menus based on
+the HTML specification, all major browsers have support for the contextmenu
+event, which can be used to build a right-click menu.
+
+# contextmenu event.
+HTML consists of a tree of elements such as ~<body>~, ~<div>~ or ~<button>~, an
+example of HTML's tree structure can be seen in the image below. When a
+JavaScript event occurs at one of these elements it propagates upward through
+the tree of elements. An example of an event occurring at an element is a
+"click" event occurring when a user clicks on an element, the "click" event
+propagates upward through the tree of elements unless it is handled or it
+reaches the root element, this idea of events propagating and being handled is
+very similar to the idea of exceptions propagating and being captured. The event
+we are interested in is the "contextmenu" event.
+
+# Preventing propagation.
+
+# Modifying Threepenny-gui.
+
+# Incorrect co-ordinates.
+
+# REF https://developer.mozilla.org/en/docs/Web/Events/click
+
 ** Layout Combinators
+   DEADLINE: <2017-04-24 Mon>
+
+*** Layout
+
+*** Flexbox
+
+*** Implementation
 
 ** File Selection
+
+*** Browser Security
    
 ** Electron
+   DEADLINE: <2017-04-25 Tue>
 
 ** Electron Packager
 
 ** Directory Selection
+   DEADLINE: <2017-04-26 Wed>
 
 ** Functional Reactive Programming
+   DEADLINE: <2017-04-27 Thu>
 
 ** Abstract GUI Layer
+   DEADLINE: <2017-04-28 Fri>
 
 ** Conflicting Architectures
+   DEADLINE: <2017-04-29 Sat>
    
 ** Web Development Libraries
+   DEADLINE: <2017-04-30 Sun>
 
 * Reflections
-
-** Edit-Compile-Evaluate
+  DEADLINE: <2017-05-01 Mon>
 
 ** Conclusion
+*** Edit-Compile-Evaluate
+*** Threepenny-gui's Future
+
+* Appendices
+
+** Terminology
+** threepenny-gui-contextmenu
+** threepenny-gui-flexbox
 
 \insertbibliography
 
