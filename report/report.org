@@ -354,24 +354,26 @@ detail, by looking at a minimal working \thp{} application. While working our
 way through the application we will be referring to the image below which
 describes the life-cycle of a \thp{} application.
 
-\begin{center}
-  \includegraphics[scale=0.15]{images/threepenny-run-ui.png}
-\end{center}
+# \begin{center}
+#   \includegraphics[scale=0.15]{images/threepenny-run-ui.png}
+# \end{center}
 
-*Life-cycle of a \thp{} Application*
+#+CAPTION: Life-cycle of a thp Application.
+[[./images/threepenny-run-ui.png]]
 
 # Overview of minimal application.
-The Haskell code of the \thp{} application we are looking at is below. In
+The Haskell code of the \thp{} application we will walk-through is below. In
 particular we are concerned with the four lines of the body of the function
-~app~. The remaining code is boilerplate to achieve a full working application.
-The first line of ~app~ creates a button with text "Click me!". In the second
-line we attach that button to the HTML ~<body>~. The third line causes its body
-to be evaluated when a user clicks the button. The fourth line is what is then
-evaluated, it changes the button's text to "I have been clicked!".
+~app~. The remaining code is necessary boilerplate to achieve a full working
+application. The first line of ~app~ creates a button with text "Click me!". In
+the second line we attach that button to the HTML ~<body>~. The third line
+causes its body to be evaluated when a user clicks the button. The fourth line
+is what is then evaluated, it changes the button's text to "I have been
+clicked!".
 
 # TERM boilerplate
 
-#+BEGIN_SRC Haskell
+#+BEGIN_SRC haskell
 module Main where
 
 import qualified Graphics.UI.Threepenny      as UI
@@ -382,7 +384,7 @@ main = startGUI defaultConfig app
 app window = do
   button <- UI.button # set UI.text "Click me!"
   getBody window #+ [element button]
-  on UI.click button $ const $
+  on UI.click button $ \(x, y) ->
     element button # set UI.text "I have been clicked!"
 #+END_SRC
 
@@ -422,7 +424,9 @@ opened our \thp{} application code is evaluated, this corresponds with the
 fourth arrow in our life cycle diagram. In the second line of ~app~, JavaScript
 code is sent from the server to the browser to be evaluated, this code adds the
 button element from the first line to the HTML ~<body>~. In the third line the
-server tells the browser that it should be informed of any clicks on the button.
+server tells the browser that it should be informed of any clicks on the button,
+in other words we are registering an event handler that is triggered by clicks
+to the button.
 
 # Event loop.
 Finally we will consider the loop in the life cycle diagram. The browser informs
@@ -442,31 +446,32 @@ closes the browser tab or the server is killed.
 # Why right-click menu first.
 Right-click menus are widely used in the existing \utp{} application, below is a
 screenshot showing a right-click menu on the application's home screen. Building
-a right-click menu using \thp{} represented, to some degree, an investigation
-into the feasibility of using \thp{} to build an entire GUI for \utp{}. This is
-because a right-click menu is one of the more complex components of a GUI and
-also because of the widespread use of right-click menus in \utp{}.
+a custom right-click menu using \thp{} represented, to some degree, an
+investigation into the feasibility of using \thp{} to build an entire GUI for
+\utp{}. This is both because a right-click menu is one of the more complex
+components of a GUI and also because of the widespread use of right-click menus
+in \utp{}.
 
 # TODO screenshot of right-click menu.
 
 # REF https://html.spec.whatwg.org/multipage/forms.html#context-menus
 
 # Not supported by Threepenny-gui. 
-\thp{} does not provide a facility to build a right-click menu. You might expect
-that a GUI library would provide support for this, since it seems like one of
-the fundamental parts of a GUI. However \thp{}'s approach is different to a
-traditional GUI library, it acts as a wrapper around existing web technologies,
-leveraging their power. This means that building a right-click menu in \thp{}
-instead becomes the problem of building a right-click menu using web
-technologies.
+\thp{} does not provide a facility to build a right-click menu. You might
+expect, like I did, that a GUI library would provide support for building a
+right-click menu, since it seems like one of the fundamental parts of a GUI.
+However \thp{}'s approach is different to a traditional GUI library, it acts as
+a wrapper around existing web technologies, leveraging their power. This means
+that the problem of building a right-click menu in \thp{} instead becomes the
+problem of building a right-click menu using web technologies.
 
 # Right-click menu using web technologies.
 Building a right-click menu using web technologies is not entirely
 straightforward either. There exists a HTML specification for building a
-right-click menu however it is only implemented and enabled by Mozilla's Firefox
+right-click menu however it is only enabled by default by Mozilla's Firefox
 browser. Google's Chrome browser and Apple's Safari have implemented the
 specification however is must be enabled via a developer flag. Microsoft's Edge
-does not support the specification. The HTML specification for building a
+does not support the specification. This HTML specification for building a
 right-click menu only existed as a recommendation by Mozilla at the time of my
 investigation though it was accepted to the HTML Living Standard on January 17
 2017, however browser support is as previously mentioned.
@@ -476,28 +481,112 @@ investigation though it was accepted to the HTML Living Standard on January 17
 *** Implementation
 
 # contextmenu event introduction.
-While most browser's do not have enabled support for right-click menus based on
-the HTML specification, all major browsers have support for the contextmenu
-event, which can be used to build a right-click menu.
+While most major browser's do not, at least by default, support right-click
+menus based on the HTML specification, all major browsers support the JavaScript
+~contextmenu~ event which can be used to build a right-click menu, albeit with a
+bit more work. JavaScript events, in particular the ~contextmenu~ event and how
+it can be used to build a right-click menu is explained below.
 
-# contextmenu event.
+# Event propagation.
 HTML consists of a tree of elements such as ~<body>~, ~<div>~ or ~<button>~, an
-example of HTML's tree structure can be seen in the image below. When a
-JavaScript event occurs at one of these elements it propagates upward through
-the tree of elements. An example of an event occurring at an element is a
-"click" event occurring when a user clicks on an element, the "click" event
-propagates upward through the tree of elements unless it is handled or it
-reaches the root element, this idea of events propagating and being handled is
-very similar to the idea of exceptions propagating and being captured. The event
-we are interested in is the "contextmenu" event.
+example of HTML's tree structure is shown in the figure below. When a JavaScript
+event occurs at one of these elements it propagates upward through the tree of
+elements; downward propagation is also possible, though upward propagation is
+most common. For example when a user clicks on an element a ~click~ event is
+fired at that element and propagates upward through the tree of elements.
+JavaScript event handlers can be bound to elements, such that when an event
+propagates through an element it can trigger an event handler. This idea of
+event propagation and handling is very similar to the idea of exception
+propagation and capturing which is available in most programming languages.
 
-# Preventing propagation.
+# REF http://www.computerhope.com/jargon/d/dom1.jpg
 
-# Modifying Threepenny-gui.
+# The contextmenu event.
+According to Mozilla's documentation "The ~contextmenu~ event is fired when the
+right button of the mouse is clicked (before the context menu is displayed), or
+when the context menu key is pressed". This simply means that the ~contextmenu~
+event is fired when a user right-clicks, the context menu key mentioned refers
+to the fact that a user can simulate a right-click on some keyboards. An event
+handler for a ~contextmenu~ event is thus a function that will only be evaluated
+when a user right-clicks.
 
-# Incorrect co-ordinates.
+# Design overview.
+To build a right-click menu we need to know two important things, when a user
+right-clicks on an element and the coordinates of the right-click. If we know
+when a user has right-clicked on an element then we know when to display our
+right-click menu, if we know the coordinates of the right-click then we know
+where to display our right-click menu.
+
+# Design.
+To solidify our goals: we want to display a custom right-click menu R when a
+user right-clicks on a element E. Our approach to building this right-click menu
+is to write an event handler that is triggered by a ~contextmenu~ event fired by
+the element E. When this event handler is evaluated we will display a custom
+right-click at the coordinates given in the ~contextmenu~ event. The right-click
+menu we will display will simply be built from standard HTML elements such as
+~<div>~, with some styling.
+
+# Implementation.
+We previously discussed writing an event handler in the background section on
+\thp{}, the relevant code is shown again below -- the event handler created
+would be triggered by a ~click~ event fired by the ~button~ element. To build a
+right-click menu we want to accomplish something similar but our event handler
+needs to be triggered by a ~contextmenu~ event instead of a ~click~ event. The
+problem was, at the time, \thp{} did not provide a ~UI.contextmenu~ function
+similar to ~UI.click~.
+
+# TERM Pull Request
+
+#+BEGIN_SRC haskell
+on UI.click button $ \(x, y) ->
+  -- event handler body
+#+END_SRC
+
+# Pull Request.
+A pull request is a request to merge code with an existing code base. We sent a
+pull request to the \thp{} repository which added a ~UI.contextmenu~ function to
+\thp{}, the pull request was accepted the code is now part of the current \thp{}
+source code. Now with ~UI.contextmenu~ it is possible to create event handlers
+that are evaluated when a user right-clicks an element.
+
+# threepenny-gui-contextmenu.
+Now that \thp{} supports writing event handlers for ~contextmenu~ events the
+next step is to write a library which leverages that capability and allows a
+user to build right-click menus. We built a library called \tgc{} which is
+publicly available and provides this functionality. The README of \tgc{} is
+available as an appendix.
+
+A custom right-click menu built with \tgc{}, some items in the right-click menu
+change the button's colour, other items open a nested menu.
+
+A custom right-click menu built for \utp{} using \tgc{}.
+
+# REF https://developer.mozilla.org/en/docs/Web/Events/contextmenu
 
 # REF https://developer.mozilla.org/en/docs/Web/Events/click
+
+*** Feasibility 
+
+Implementing \tgc{} was not straightforward. For example, when our event handler
+is triggered on a right-click, we need to prevent the ~contextmenu~ event from
+propagating, otherwise the standard browser right-click menu would be shown in
+addition to our custom right-click menu. Furthermore, right-click menus have
+complex behaviour that one might not initially consider. For example when a
+user's mouse leaves the right-click menu, all nested menus are closed but the
+root menu remains open, as depicted below.
+
+We mentioned at the beginning of this chapter that building a custom right-click
+menu using \thp{} represented, to some degree, an investigation into the
+feasibility of using \thp{} to build an entire GUI for \utp{}. Considering the
+difficulties in doing so, it raises the question of whether \thp{} is a feasible
+choice for building a GUI for \utp{}? Our answer is that it is, this answer is
+justified as follows. While implementing a right-click menu was difficult, it
+also was possible, this serves as an indicator that we can use \thp{} as an
+alternative to wxHaskell. More importantly however, while implementing a
+right-click menu we managed to contribute to \thp{}'s source code. Considering
+the poor state of the Haskell GUI space, the fact that we can contribute to a
+library like \thp{}, and ever so slightly improve the state of the Haskell GUI
+space, is a large positive.
 
 ** Layout Combinators
    DEADLINE: <2017-04-24 Mon>
@@ -532,6 +621,7 @@ we are interested in is the "contextmenu" event.
 ** Web Development Libraries
    DEADLINE: <2017-04-30 Sun>
 
+
 * Reflections
   DEADLINE: <2017-05-01 Mon>
 
@@ -545,6 +635,6 @@ we are interested in is the "contextmenu" event.
 ** threepenny-gui-contextmenu
 ** threepenny-gui-flexbox
 
-\insertbibliography
+bibliography:../../../bibliography/references.bib
 
 \appendix
