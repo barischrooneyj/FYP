@@ -433,7 +433,7 @@ Finally we will consider the loop in the life cycle diagram. The browser informs
 the server whenever the button click event occurs, this corresponds to the fifth
 arrow in the life cycle diagram. When the server receives this information the
 fourth line of ~app~ is run, sending JavaScript code to the browser to change
-the buttons text to "I have been clicked!" which corresponds to the final arrow
+the button's text to "I have been clicked!" which corresponds to the final arrow
 of the life cycle diagram. This event loop will continue until either the user
 closes the browser tab or the server is killed.
 
@@ -567,13 +567,14 @@ A custom right-click menu built for \utp{} using \tgc{}.
 
 *** Feasibility 
 
-Implementing \tgc{} was not straightforward. For example, when our event handler
-is triggered on a right-click, we need to prevent the ~contextmenu~ event from
-propagating, otherwise the standard browser right-click menu would be shown in
-addition to our custom right-click menu. Furthermore, right-click menus have
-complex behaviour that one might not initially consider. For example when a
-user's mouse leaves the right-click menu, all nested menus are closed but the
-root menu remains open, as depicted below.
+Implementing \tgc{} was not straightforward, even after ~UI.contextmenu~ had
+been added to \thp{}. Conditions had to taken into account which were not
+initially considered, for example when our \tgc{} event handler is triggered on
+a right-click, we need to prevent the ~contextmenu~ event from propagating,
+otherwise the standard browser right-click menu would be shown in addition to
+our custom right-click menu. Another example is when a user's mouse leaves a
+right-click menu, all nested menus are closed but the root menu remains open, as
+depicted below.
 
 We mentioned at the beginning of this chapter that building a custom right-click
 menu using \thp{} represented, to some degree, an investigation into the
