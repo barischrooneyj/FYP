@@ -528,7 +528,7 @@ menu we will display will simply be built from standard HTML elements such as
 
 # Implementation.
 We previously discussed writing an event handler in the background section on
-\thp{}, the relevant code is shown again below -- the event handler created
+\thp{}, the relevant code is shown again below, here the event handler created
 would be triggered by a ~click~ event fired by the ~button~ element. To build a
 right-click menu we want to accomplish something similar but our event handler
 needs to be triggered by a ~contextmenu~ event instead of a ~click~ event. The
@@ -545,9 +545,9 @@ on UI.click button $ \(x, y) ->
 # Pull Request.
 A pull request is a request to merge code with an existing code base. We sent a
 pull request to the \thp{} repository which added a ~UI.contextmenu~ function to
-\thp{}, the pull request was accepted the code is now part of the current \thp{}
-source code. Now with ~UI.contextmenu~ it is possible to create event handlers
-that are evaluated when a user right-clicks an element.
+\thp{}, the pull request was accepted and the code is now part of \thp{}. Now
+with ~UI.contextmenu~ it is possible to create event handlers that are evaluated
+when a user right-clicks an element.
 
 # threepenny-gui-contextmenu.
 Now that \thp{} supports writing event handlers for ~contextmenu~ events the
@@ -568,7 +568,7 @@ A custom right-click menu built for \utp{} using \tgc{}.
 *** Feasibility 
 
 Implementing \tgc{} was not straightforward, even after ~UI.contextmenu~ had
-been added to \thp{}. Conditions had to taken into account which were not
+been added to \thp{}. Conditions had to be taken into account which were not
 initially considered, for example when our \tgc{} event handler is triggered on
 a right-click, we need to prevent the ~contextmenu~ event from propagating,
 otherwise the standard browser right-click menu would be shown in addition to
@@ -580,7 +580,7 @@ We mentioned at the beginning of this chapter that building a custom right-click
 menu using \thp{} represented, to some degree, an investigation into the
 feasibility of using \thp{} to build an entire GUI for \utp{}. Considering the
 difficulties in doing so, it raises the question of whether \thp{} is a feasible
-choice for building a GUI for \utp{}? Our answer is that it is, this answer is
+choice for building a GUI for \utp{}? Our answer is that it is. This answer is
 justified as follows. While implementing a right-click menu was difficult, it
 also was possible, this serves as an indicator that we can use \thp{} as an
 alternative to wxHaskell. More importantly however, while implementing a
