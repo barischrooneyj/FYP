@@ -669,7 +669,7 @@ elements in a ratio of 1:2:1 using CSS Flexbox properties, the graphical result
 of this HTML is also shown below. Note that some additional styling code is not
 shown.
 
-#+CAPTION: HTML for [[image:flex-ratio]].
+#+CAPTION: HTML code for Figure 6.2.
 #+BEGIN_SRC html
 <div style="display: flex;">
   <div style="flex-grow: 1;">foo</div>
@@ -678,21 +678,19 @@ shown.
 </div>
 #+END_SRC
 
-# #+LABEL: image:flex-ratio
-
-#+CAPTION: Three elements in ratio.
-#+LABEL: image:flex-ratio
+#+CAPTION: Three elements in ratio 1:2:1.
+#+NAME: fig:image
 [[./images/flex-ratio.png]]
 
 # threepenny-gui-flexbox
-We wrote a library called \tgf{} which provides a method of writing the
+We published a library called \tgf{} which provides a method of writing the
 necessary CSS properties for Flexbox and applying them to Threepenny elements.
 This library is in Stack and its README is attached as an appendix. The code
-# that is required to achieve the layout in [[image:flex-ratio]] but using \thp{} and
-\tgf{} instead of HTML is shown below, again note that some additional styling
-code is not shown.
+that is required to achieve the layout in Figure 6.2 but using \thp{} and \tgf{}
+instead of HTML is shown below, again note that some additional styling code is
+not shown.
 
-#+CAPTION: \thp{} for
+#+CAPTION: \thp{} code for Figure 6.2.
 #+BEGIN_SRC haskell
 flex_p UI.div [
       (foo, flexGrow 1)
@@ -726,7 +724,6 @@ where foo = UI.div # set UI.text "foo"
 ** Web Development Libraries
    DEADLINE: <2017-04-30 Sun>
    
-
 * Reflections
   DEADLINE: <2017-05-01 Mon>
 
