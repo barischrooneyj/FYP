@@ -607,10 +607,19 @@ simply an unavoidable consideration when building a GUI.
 # Curse of CSS.
 HTML and CSS are powerful tools which allow us to create complex layouts,
 however the means to do so can also be complex. \thp{} leverages the power of
-these web technologies meaning that any layout in HTML and CSS is also possible
-in \thp{}. According to the \thp{} homepage "This is a blessing, but it can also
-be a curse, so the library includes a few layout combinators to quickly create
-user interfaces without the need to deal with the mess that is CSS".
+these web technologies meaning that any layout which is possible using HTML and
+CSS is also possible in \thp{}. While HTML and CSS are powerful tools they can
+also be confusing, especially for those who are only looking for a GUI library
+in Haskell and are unfamiliar with HTML and CSS.
+
+#+BEGIN_QUOTE
+You have all capabilities of HTML at your disposal when creating user
+interfaces. This is a blessing, but it can also be a curse, so the library
+includes a few layout combinators to quickly create user interfaces without the
+need to deal with the mess that is CSS.
+
+-- https://wiki.haskell.org/Threepenny-gui
+#+END_QUOTE
 
 # HTML table image.
 
@@ -644,7 +653,7 @@ any direction, and can “flex” their sizes, either growing to fill unused spa
 or shrinking to avoid overflowing the parent. Both horizontal and vertical
 alignment of the children can be easily manipulated.
 
-    -- Flexible Box Layout, W3C Candidate Recommendation, 26 May 2016
+-- Flexible Box Layout, W3C Candidate Recommendation, 26 May 2016
 #+END_QUOTE
 
 #+CAPTION: Using Flexbox to wrap elements onto a newline on overflow.
@@ -656,9 +665,9 @@ alignment of the children can be easily manipulated.
 Heinrich Apfelmus appears in favour of Flexbox, writing that Flexbox "apperas to
 solve most of the layout woes. Flexboxes may be a good start for implementing
 proper layout combinators in Haskell". Flexbox would allow us to write
-responsive layouts for \utp{} and it was a direction for \thp{} that Apfelmus
-was in favour of. For these reasons we decided to write a library that would add
-Flexbox support to \thp{}.
+responsive layouts for \utp{} and it is a direction for \thp{} that Apfelmus in
+in favour of. For these reasons we decide to write a library to add Flexbox
+support to \thp{}.
 
 # Flexbox properties.
 Flexbox is a CSS specification, this means Flexbox layouts are written using CSS
@@ -669,7 +678,11 @@ elements in a ratio of 1:2:1 using CSS Flexbox properties, the graphical result
 of this HTML is also shown below. Note that some additional styling code is not
 shown.
 
-#+CAPTION: HTML code for Figure 6.2.
+#+CAPTION: Three elements in ratio 1:2:1
+#+NAME: fig:flex-ratio
+[[./images/flex-ratio.png]]
+
+#+CAPTION: HTML code for figure [[fig:flex-ratio]]
 #+BEGIN_SRC html
 <div style="display: flex;">
   <div style="flex-grow: 1;">foo</div>
@@ -678,32 +691,97 @@ shown.
 </div>
 #+END_SRC
 
-#+CAPTION: Three elements in ratio 1:2:1.
-#+NAME: fig:image
-[[./images/flex-ratio.png]]
-
-# threepenny-gui-flexbox
+# threepenny-gui-flexbox.
 We published a library called \tgf{} which provides a method of writing the
 necessary CSS properties for Flexbox and applying them to Threepenny elements.
 This library is in Stack and its README is attached as an appendix. The code
-that is required to achieve the layout in Figure 6.2 but using \thp{} and \tgf{}
-instead of HTML is shown below, again note that some additional styling code is
-not shown.
+that is required to achieve the layout in figure [[fig:flex-ratio]] but using \thp{}
+and \tgf{} instead of HTML is shown below, again note that some additional
+styling code is not shown.
 
-#+CAPTION: \thp{} code for Figure 6.2.
+#+CAPTION: \thp{} code for figure [[fig:flex-ratio]]
 #+BEGIN_SRC haskell
-flex_p UI.div [
-      (foo, flexGrow 1)
-    , (foo, flexGrow 2)
-    , (foo, flexGrow 1)
-    ]
-where foo = UI.div # set UI.text "foo"
+UI.div # setFlex parentProps #+ [
+    (UI.div # set UI.text "foo" # setFlex flexGrow 1)
+  , (UI.div # set UI.text "foo" # setFlex flexGrow 2)
+  , (UI.div # set UI.text "foo" # setFlex flexGrow 1)
+  ]
 #+END_SRC
 
 ** File Selection
 
-*** Browser Security
-   
+*** Background
+    :LOGBOOK:
+    CLOCK: [2017-04-26 Wed 17:14]--[2017-04-26 Wed 17:39] =>  0:25
+    CLOCK: [2017-04-26 Wed 16:39]--[2017-04-26 Wed 17:04] =>  0:25
+    :END:
+
+# Directory selection necessary.
+When a user runs the existing \utp{} application for the first time the first
+thing presented to the user is a file selection dialog. This dialog asks the
+user to select a directory which will be the user's workspace while using the
+application. The workspace contains files that preserve \utp{} state which will
+be loaded again the next time the user starts the application. For this reason
+it is necessary to be able to accomplish directory selection with \thp{}.
+
+#+CAPTION: Selecting a workspace in \utp{}.
+#+NAME: fig:wxhaskell-utp2-workspace-selection
+TODO image of workspace selection.
+
+# Not a Threepenny problem, a HTML problem.
+\thp{} does not itself present any facilities for achieving directory selection.
+This again, similar to a right-click menu, seems like fundamental functionality
+that a GUI library should provide. In fact to implement directory selection, we
+must take a similar approach as we did with building a right-click menu. Because
+\thp{} is a wrapper around existing web technologies, leveraging their power,
+the problem of implementing directory selection using \thp{} instead becomes a
+problem of implementing directory selection using web technologies.
+
+# TERM web technologies.
+
+# A HTML solution.
+Directory selection and file selection are very similar as far as a user is
+concerned, in both cases the user is presented with a window like the one in
+figure [[fig:wxhaskell-utp2-workspace-selection]], the only difference is the
+limitation of what the user is allowed to select. In HTML, the code for a
+directory selector and file selector are very similar, in fact a directory
+selector is simply a file selector with one additional attribute, see listings
+[[list:html-file-selector]] and [[list:html-directory-selector]]. For this reason we
+will first attempt to build a file selector in \thp{}, and will later return to
+building a directory selector.
+
+#+CAPTION: A file selector in HTML.
+#+NAME: list:html-file-selector
+#+BEGIN_SRC html
+<input type="file">
+#+END_SRC
+
+#+CAPTION: A directory selector in HTML.
+#+NAME: list:html-directory-selector
+#+BEGIN_SRC html
+<input type="file" webkitdirectory>
+#+END_SRC
+
+*** Implementation
+
+# First attempt and error.
+Our first attempt at building a file selector with \thp{} is to write code which
+results in listing [[list:html-file-selector]] in the browser, when a user selects a
+file we will print the file path to stdout. This is easy to accomplish with
+\thp{} and is shown in [[list:threepenny-file-selector]]. Unfortunately, this code
+does not print the correct file path to stdout. When a user runs the application
+and selects a file such as ~/Users/foo/bar.txt~ the file path
+~C:\fakepath\bar.txt~ is printed to stdout.
+
+#+CAPTION: File selector in \thp{} that prints file path to stdout.
+#+LABEL: 
+# Browser security.
+The reason that ~C:\fakepath\foo.txt~ is printed to stdout is because of a
+security feature that is present in all major browsers. Consider you are
+browsing a website ~example.com~ and are prompted to select a file. You
+select the file ~
+
+
 ** Electron
    DEADLINE: <2017-04-25 Tue>
 
@@ -737,6 +815,6 @@ where foo = UI.div # set UI.text "foo"
 ** threepenny-gui-contextmenu
 ** threepenny-gui-flexbox
 
-bibliography:../../../bibliography/references.bib
+bibliography:~/bibliography/references.bib
 
 \appendix

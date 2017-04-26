@@ -1,0 +1,18 @@
+%% Draw the lines to sign on.
+\usetikzlibrary{decorations.markings}
+\newcommand{\signedanddate} [3] []{
+  $ $\\
+  $ $\\
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[#2-#3, thick, #1] (0,0) to (0.5\linewidth,0);
+      \node[align=left, below] at (1.75,0) {\authorname};
+      \draw[#2-#3, thick, #1] (0.7\linewidth,0) to (\linewidth,0);
+      \node[align=left,below] at(0.729\linewidth,0) {Date};
+    \end{tikzpicture}
+  \end{center}
+}
+
+\newcommand \signed[1]{
+  \signedanddate{}{}
+}
