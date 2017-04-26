@@ -1,32 +1,35 @@
+# Set documentclass in org. Otherwise if we set it in preamble then org will
+# generate a second documentclass itself, causing a LaTeX compiler error.
 #+LATEX_CLASS: report
+
+# Include LaTeX preamble.
 #+LATEX_HEADER: \include{settings/preamble}
-#+LATEX_HEADER: \usepackage{parskip}
+
+# We generate our own table of contents, so suppress the default one.
 #+OPTIONS: toc:nil
 
-# \usepackage{draftwatermark}
+# Begin LaTeX ##################################################################
 
-\inserttitlepage
+# Preliminary pages.
 
+\include{tcd/titlepage}
 \pagenumbering{roman}
 \setcounter{page}{1}
-
-\declaration
-
-\permissiontolend
-
+\include{tcd/declaration}
+\include{tcd/permissiontolend}
 \setcounter{page}{3}
-\insertabstract
-
-# Need to fiddle with page numbers manually to make them consistent
+\include{abstract}
 \setcounter{page}{4}
-\acknowledgements
-
+\include{acknowledgements}
 \tableofcontents
-
 \newpage
+
+# Prepare for body of report.
 
 \pagenumbering{arabic}
 \setcounter{page}{1}
+
+# End LaTeX ####################################################################
 
 * Background
 ** Existing Software
@@ -47,9 +50,9 @@ over by a new set of maintainers. The goal of the project is to provide an
 do so by building on top of an existing GUI library REF, and thus avoid the
 majority of the burden of developing a GUI library themselves REF.
 
-\begin{center}
-  \includegraphics[scale=0.7]{images/existing-utp2-home-screen.png}
-\end{center}
+# \begin{center}
+#   \includegraphics[scale=0.7]{images/existing-utp2-home-screen.png}
+# \end{center}
 
 ** Existing Issues
 *** Object Oriented Concepts
@@ -184,8 +187,8 @@ principle on Max OS X as well, but I have not been able to get this to work
 
 In respect of the object oriented concepts exposed by the wxHaskell library, and
 the difficulty in building \utp{} and creating operating system native
-applications of \utp{} -- in both of which wxHaskell plays a role -- I decided
-to attempt building a GUI for \utp{} using an alternative GUI library, one I
+applications of \utp{} -- in both of which wxHaskell plays a role -- we decided
+to attempt building a GUI for \utp{} using an alternative GUI library, one we
 hoped would alleviate all of the problems associated with wxHaskell.
 
 ** A New Hope
@@ -354,11 +357,7 @@ detail, by looking at a minimal working \thp{} application. While working our
 way through the application we will be referring to the image below which
 describes the life-cycle of a \thp{} application.
 
-# \begin{center}
-#   \includegraphics[scale=0.15]{images/threepenny-run-ui.png}
-# \end{center}
-
-#+CAPTION: Life-cycle of a thp Application.
+#+CAPTION: Life cycle of a \thp{} application.
 [[./images/threepenny-run-ui.png]]
 
 # Overview of minimal application.
@@ -458,10 +457,10 @@ in \utp{}.
 
 # Not supported by Threepenny-gui. 
 \thp{} does not provide a facility to build a right-click menu. You might
-expect, like I did, that a GUI library would provide support for building a
-right-click menu, since it seems like one of the fundamental parts of a GUI.
-However \thp{}'s approach is different to a traditional GUI library, it acts as
-a wrapper around existing web technologies, leveraging their power. This means
+expect, that a GUI library would provide support for building a right-click
+menu, since it seems like one of the fundamental parts of a GUI. However
+\thp{}'s approach is different to a traditional GUI library, it acts as a
+wrapper around existing web technologies, leveraging their power. This means
 that the problem of building a right-click menu in \thp{} instead becomes the
 problem of building a right-click menu using web technologies.
 
@@ -570,11 +569,13 @@ A custom right-click menu built for \utp{} using \tgc{}.
 Implementing \tgc{} was not straightforward, even after ~UI.contextmenu~ had
 been added to \thp{}. Conditions had to be taken into account which were not
 initially considered, for example when our \tgc{} event handler is triggered on
-a right-click, we need to prevent the ~contextmenu~ event from propagating,
-otherwise the standard browser right-click menu would be shown in addition to
-our custom right-click menu. Another example is when a user's mouse leaves a
-right-click menu, all nested menus are closed but the root menu remains open, as
-depicted below.
+a right-click, we need to prevent the ~contextmenu~ event from propagating
+further, otherwise the standard browser right-click menu would also be shown in
+addition to our custom right-click menu. Another difficult case when a user's
+mouse leaves a right-click menu, all nested menus are closed but the root menu
+remains open, as depicted below.
+
+# TODO image.
 
 We mentioned at the beginning of this chapter that building a custom right-click
 menu using \thp{} represented, to some degree, an investigation into the
@@ -589,14 +590,117 @@ the poor state of the Haskell GUI space, the fact that we can contribute to a
 library like \thp{}, and ever so slightly improve the state of the Haskell GUI
 space, is a large positive.
 
-** Layout Combinators
-   DEADLINE: <2017-04-24 Mon>
+** Layout
 
-*** Layout
+*** Background
+
+# TODO Navbar and main viewing are image.
+
+# An unavoidable consideration.
+What is displayed in a GUI is, at a high-level of abstraction, simply a set of
+elements in a certain layout. For example a GUI might consist of a navigation
+bar above a main viewing area, a simple two element layout. Each of these two
+elements might again consist of a layout of further elements, for example the
+navigation bar might consist of multiple tabs in a horizontal layout. Layout is
+simply an unavoidable consideration when building a GUI.
+
+# Curse of CSS.
+HTML and CSS are powerful tools which allow us to create complex layouts,
+however the means to do so can also be complex. \thp{} leverages the power of
+these web technologies meaning that any layout in HTML and CSS is also possible
+in \thp{}. According to the \thp{} homepage "This is a blessing, but it can also
+be a curse, so the library includes a few layout combinators to quickly create
+user interfaces without the need to deal with the mess that is CSS".
+
+# HTML table image.
+
+# Threepenny's limited layout combinators.
+The layout combinators (functions) that \thp{} provide allow us to layout
+elements in tables, where each element is contained in a cell of the table.
+These tables are displayed in the browser using ~<table>~, ~<tr>~ and ~<td>~
+HTML elements. HTML tables have long been the de facto standard for writing
+layouts in HTML documents. However they have limitations; in particular HTML
+table layouts are not responsive, elements have a static size that will not
+change based on screen size. Heinrich Apfelmus acknowledges their limitation,
+stating that they "tend to behave unpredictable, especially when content size
+changes dynamically".
 
 *** Flexbox
 
+# REF https://www.w3.org/TR/css-flexbox-1/
+
+# Power of Flexbox.
+Flexible box, or Flexbox, is a CSS specification which was introduced as a
+recommendation by W3C in May 2016, and is currently supported by all major
+browsers. Flexbox provides a means for writing responsive layouts, Flexbox
+allows elements to grow to fill available space, or to shrink to avoid overflow.
+We can also do more complex things like specify that elements should have sizes
+according to a certain ratio, or have elements wrap onto new lines if there is
+not enough space on the current line.
+
+#+BEGIN_QUOTE
+In the flex layout model, the children of a flex container can be laid out in
+any direction, and can “flex” their sizes, either growing to fill unused space
+or shrinking to avoid overflowing the parent. Both horizontal and vertical
+alignment of the children can be easily manipulated.
+
+    -- Flexible Box Layout, W3C Candidate Recommendation, 26 May 2016
+#+END_QUOTE
+
+#+CAPTION: Using Flexbox to wrap elements onto a newline on overflow.
+[[./images/flex-wrap.png]]
+
 *** Implementation
+
+# Justification.
+Heinrich Apfelmus appears in favour of Flexbox, writing that Flexbox "apperas to
+solve most of the layout woes. Flexboxes may be a good start for implementing
+proper layout combinators in Haskell". Flexbox would allow us to write
+responsive layouts for \utp{} and it was a direction for \thp{} that Apfelmus
+was in favour of. For these reasons we decided to write a library that would add
+Flexbox support to \thp{}.
+
+# Flexbox properties.
+Flexbox is a CSS specification, this means Flexbox layouts are written using CSS
+properties, also known as CSS rules. To write Flexbox layouts, it is simply a
+matter of applying the correct CSS properties to a parent element and its
+children elements. Below is some example HTML showing how we can achieve three
+elements in a ratio of 1:2:1 using CSS Flexbox properties, the graphical result
+of this HTML is also shown below. Note that some additional styling code is not
+shown.
+
+#+CAPTION: HTML for [[image:flex-ratio]].
+#+BEGIN_SRC html
+<div style="display: flex;">
+  <div style="flex-grow: 1;">foo</div>
+  <div style="flex-grow: 2;">foo</div>
+  <div style="flex-grow: 1;">foo</div>
+</div>
+#+END_SRC
+
+# #+LABEL: image:flex-ratio
+
+#+CAPTION: Three elements in ratio.
+#+LABEL: image:flex-ratio
+[[./images/flex-ratio.png]]
+
+# threepenny-gui-flexbox
+We wrote a library called \tgf{} which provides a method of writing the
+necessary CSS properties for Flexbox and applying them to Threepenny elements.
+This library is in Stack and its README is attached as an appendix. The code
+# that is required to achieve the layout in [[image:flex-ratio]] but using \thp{} and
+\tgf{} instead of HTML is shown below, again note that some additional styling
+code is not shown.
+
+#+CAPTION: \thp{} for
+#+BEGIN_SRC haskell
+flex_p UI.div [
+      (foo, flexGrow 1)
+    , (foo, flexGrow 2)
+    , (foo, flexGrow 1)
+    ]
+where foo = UI.div # set UI.text "foo"
+#+END_SRC
 
 ** File Selection
 
@@ -621,7 +725,7 @@ space, is a large positive.
    
 ** Web Development Libraries
    DEADLINE: <2017-04-30 Sun>
-
+   
 
 * Reflections
   DEADLINE: <2017-05-01 Mon>

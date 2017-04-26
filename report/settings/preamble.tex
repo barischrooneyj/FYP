@@ -1,0 +1,46 @@
+%% Set page size and margins.
+\usepackage[a4paper, left=1.3in, right=1.0in]{geometry}
+
+%% Skip a line between paragraphs.
+\usepackage{parskip}
+
+%% Set font-size and line-spacing.
+\linespread{1.4}
+
+%% Lets us pick fonts.
+\usepackage{fontspec}
+
+%% Use a font that closely match the SCSS word template.
+\setmainfont[Mapping=tex-text]{Times New Roman}
+\setsansfont{Helvetica}
+\setmonofont{Courier New}
+
+%% For fancy italic headings.
+\pagestyle{headings}
+
+%% Make all our constants available.
+\input{settings/constants}
+
+%% For drawing lines e.g. signatures lines.
+\usepackage{tikz}
+
+%% \usepackage{natbib}
+
+%% Draw the lines to sign on.
+\usetikzlibrary{decorations.markings}
+\newcommand{\signedanddate} [3] []{
+  $ $\\
+  $ $\\
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[#2-#3, thick, #1] (0,0) to (0.5\linewidth,0);
+      \node[align=left, below] at (1.75,0) {\authorname};
+      \draw[#2-#3, thick, #1] (0.7\linewidth,0) to (\linewidth,0);
+      \node[align=left,below] at(0.729\linewidth,0) {Date};
+    \end{tikzpicture}
+  \end{center}
+}
+
+\newcommand \signed[1]{
+  \signedanddate{}{}
+}
