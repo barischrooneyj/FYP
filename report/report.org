@@ -32,9 +32,8 @@
 # End LaTeX ####################################################################
 
 * Background
-** Existing Software
 
-cite:Nobody06
+** Existing Software
 
 \utp{} is an existing computer application which is a Theorem Proving Assistant
 for the Unifying Theory of Programming. "Theorem Proving Assistant" means it can
@@ -52,9 +51,8 @@ over by a new set of maintainers. The goal of the project is to provide an
 do so by building on top of an existing GUI library REF, and thus avoid the
 majority of the burden of developing a GUI library themselves REF.
 
-# \begin{center}
-#   \includegraphics[scale=0.7]{images/existing-utp2-home-screen.png}
-# \end{center}
+#+CAPTION: Existing \utp{} home screen.
+[[images/existing-utp2-home-screen.png]]
 
 ** Existing Issues
 *** Object Oriented Concepts
@@ -118,7 +116,7 @@ to stay within its constructs and paradigms.
 Ease of downloading and installing libraries into sandboxes has become a staple
 of modern languages, with many modern languages like Rust, Swift and Elixir
 shipping with powerful package managers that automate this process. Haskell has
-made progress on this front with the package manager Stack.
+made progress on this front with the Haskell package manager Stack.
 
 Before Stack existed it was not uncommon to be stuck with dependency conflicts
 between libraries that your project depends on. Dependency conflicts occur when
@@ -146,7 +144,9 @@ guarantees of avoiding conflicts with wxHaskell's dependencies. At the beginning
 of this final year project \utp{} was not building with Stack at all but rather
 had to built by directly invoking the GHC compiler. Andrew Butterfield later
 succeeded in getting the project building with Stack, the significance of which
-is reflected in the relevant commit message:
+is reflected in the commit message:
+
+# TERM commit message
 
 #+BEGIN_QUOTE
 UTP2 NOW BUILDS WITH stack ON OS X 10.11.16 !!!!
@@ -330,10 +330,10 @@ might want to append a list item ~<li>~ with text "Ferrari" to a list ~<ul>~ of
 car names, and have written the appropriate Haskell code (below). At runtime
 this Haskell code is converted to JavaScript and evaluated in the browser.
 
+#+CAPTION: Appending to a list in \thp{}
 #+BEGIN_SRC Haskell
 UI.ul #+ [UI.li # set UI.text "Ferrari"]
 #+END_SRC
-*Appending to a list in \thp{}*
 
 # Event loop.
 So far we have covered the ideas that \thp{} applications are displayed using
@@ -444,6 +444,8 @@ closes the browser tab or the server is killed.
 
 *** Background
 
+# TODO below is a screenshot, fix file-wide.
+
 # Why right-click menu first.
 Right-click menus are widely used in the existing \utp{} application, below is a
 screenshot showing a right-click menu on the application's home screen. Building
@@ -463,8 +465,8 @@ expect, that a GUI library would provide support for building a right-click
 menu, since it seems like one of the fundamental parts of a GUI. However
 \thp{}'s approach is different to a traditional GUI library, it acts as a
 wrapper around existing web technologies, leveraging their power. This means
-that the problem of building a right-click menu in \thp{} instead becomes the
-problem of building a right-click menu using web technologies.
+that the problem of building a right-click menu in \thp{} is more of a problem
+of building a right-click menu using web technologies.
 
 # Right-click menu using web technologies.
 Building a right-click menu using web technologies is not entirely
@@ -583,8 +585,8 @@ We mentioned at the beginning of this chapter that building a custom right-click
 menu using \thp{} represented, to some degree, an investigation into the
 feasibility of using \thp{} to build an entire GUI for \utp{}. Considering the
 difficulties in doing so, it raises the question of whether \thp{} is a feasible
-choice for building a GUI for \utp{}? Our answer is that it is. This answer is
-justified as follows. While implementing a right-click menu was difficult, it
+choice for building a GUI for \utp{}? Our answer is that it is and that answer
+is justified as follows. While implementing a right-click menu was difficult, it
 also was possible, this serves as an indicator that we can use \thp{} as an
 alternative to wxHaskell. More importantly however, while implementing a
 right-click menu we managed to contribute to \thp{}'s source code. Considering
@@ -658,7 +660,7 @@ alignment of the children can be easily manipulated.
 -- Flexible Box Layout, W3C Candidate Recommendation, 26 May 2016
 #+END_QUOTE
 
-#+CAPTION: Using Flexbox to wrap elements onto a newline on overflow.
+#+CAPTION: Using Flexbox to wrap elements onto a newline.
 [[./images/flex-wrap.png]]
 
 *** Implementation
@@ -666,25 +668,27 @@ alignment of the children can be easily manipulated.
 # Justification.
 Heinrich Apfelmus appears in favour of Flexbox, writing that Flexbox "apperas to
 solve most of the layout woes. Flexboxes may be a good start for implementing
-proper layout combinators in Haskell". Flexbox would allow us to write
-responsive layouts for \utp{} and it is a direction for \thp{} that Apfelmus in
-in favour of. For these reasons we decide to write a library to add Flexbox
-support to \thp{}.
+proper layout combinators in Haskell". Because Flexbox would allow us to write
+responsive layouts for \utp{} and because it is a direction for \thp{} that
+Apfelmus in in favour of, we decide to write a library to add Flexbox support to
+\thp{}.
 
 # Flexbox properties.
 Flexbox is a CSS specification, this means Flexbox layouts are written using CSS
-properties, also known as CSS rules. To write Flexbox layouts, it is simply a
-matter of applying the correct CSS properties to a parent element and its
-children elements. Below is some example HTML showing how we can achieve three
-elements in a ratio of 1:2:1 using CSS Flexbox properties, the graphical result
-of this HTML is also shown below. Note that some additional styling code is not
-shown.
+properties. To write Flexbox layouts, it is simply a matter of applying the
+correct CSS properties to a parent element and its children elements. Figure
+[[fig:flex-ratio]] shows three elements in a ratio of 1:2:1; this is a responsive
+layout written with Flexbox, meaning that the ratio of the elements will be
+maintained on different screen sizes. The HTML code with the necessary CSS
+properties to achieve figure [[fig:flex-ratio]] is shown in listing [[list:flex-ratio]],
+note that some additional styling code is not shown.
 
 #+CAPTION: Three elements in ratio 1:2:1
 #+NAME: fig:flex-ratio
 [[./images/flex-ratio.png]]
 
 #+CAPTION: HTML code for figure [[fig:flex-ratio]]
+#+NAME: list:flex-ratio
 #+BEGIN_SRC html
 <div style="display: flex;">
   <div style="flex-grow: 1;">foo</div>
@@ -694,37 +698,37 @@ shown.
 #+END_SRC
 
 # threepenny-gui-flexbox.
-We published a library called \tgf{} which provides a method of writing the
-necessary CSS properties for Flexbox and applying them to Threepenny elements.
-This library is in Stack and its README is attached as an appendix. The code
-that is required to achieve the layout in figure [[fig:flex-ratio]] but using \thp{}
-and \tgf{} instead of HTML is shown below, again note that some additional
+We published a library called \tgf{} which is in Stack. \tgf{} provides a method
+of writing Flexbox CSS properties and converting them to the format expected by
+\thp{}, also included in the library are functions which provide abstractions
+for common patterns. For more detail \tgf{}'s README is attached as an appendix.
+The code to achieve figure [[fig:flex-ratio]] using \thp{} and \tgf{} instead of
+HTML is shown in listing [[list:flex-ratio-tgf]], again note that some additional
 styling code is not shown.
 
 #+CAPTION: \thp{} code for figure [[fig:flex-ratio]]
+#+NAME: list:flex-ratio-tgf
 #+BEGIN_SRC haskell
 UI.div # setFlex parentProps #+ [
-    (UI.div # set UI.text "foo" # setFlex flexGrow 1)
-  , (UI.div # set UI.text "foo" # setFlex flexGrow 2)
-  , (UI.div # set UI.text "foo" # setFlex flexGrow 1)
+    (UI.div # set UI.text "foo" # setFlex (flexGrow 1))
+  , (UI.div # set UI.text "foo" # setFlex (flexGrow 2))
+  , (UI.div # set UI.text "foo" # setFlex (flexGrow 1))
   ]
 #+END_SRC
 
-** File Selection
+** Directory Selection
 
 *** Background
-    :LOGBOOK:
-    CLOCK: [2017-04-26 Wed 17:14]--[2017-04-26 Wed 17:39] =>  0:25
-    CLOCK: [2017-04-26 Wed 16:39]--[2017-04-26 Wed 17:04] =>  0:25
-    :END:
+
+# TERM existing \utp{} application.
 
 # Directory selection necessary.
 When a user runs the existing \utp{} application for the first time the first
-thing presented to the user is a file selection dialog. The dialog asks the user
-to select a directory, which will be the application's workspace, the workspace
-contains files that persist application state. Because of their existing use in
-\utp{}, it is necessary to be able to implement directory selection dialogs with
-\thp{}.
+window presented to the user is a file selection dialog. The dialog asks the
+user to select a directory, which will be the application's workspace. The
+workspace is a directory which contains files that persist application state.
+Because of their existing use in \utp{}, it is necessary to be able to implement
+directory selection dialogs with \thp{}.
 
 #+CAPTION: Workspace selection in \utp{}.
 #+NAME: fig:wxhaskell-utp2-workspace-selection
@@ -763,10 +767,10 @@ will first attempt to build a file selector in \thp{}.
 <input type="file" webkitdirectory>
 #+END_SRC
 
-*** Implementation
+*** A Solution to File Selection
 
 # Incorrect file path.
-We can easily enough write a \thp{} application that results in a file selector
+We can quite easily write a \thp{} application that results in a file selector
 as in listing [[list:html-file-selector]], and prints the path of a selected file to
 stdout. Unfortunately, when running the application this will not print the file
 path we expect to stdout. When a user runs the application and selects a file
@@ -775,20 +779,67 @@ stdout.
 
 # Browser security.
 The reason that ~C:\fakepath\foo.txt~ is printed to stdout is because of a
-security feature that is present in all major browsers. If you are browsing a
-website, are prompted to select a file and select some file, the server can only
+security feature that is present in all major browsers. If we are browsing a
+webpage, are prompted to select a file, and select a file, the server will only
 receive the file contents and the file name. The file path is obfuscated to
-appear as ~c\fakepath\<name>~ where ~<name>~ is the file name. The reason for
+appear as ~C:\fakepath\<name>~ where ~<name>~ is the file name. The reason for
 not revealing the full file path is so that the server cannot learn about the
-file system structure of a user.
+file system structure of a user. For example if the server were to receive a
+file path such as ~/private/foo/bar.txt~ then the server is aware of the
+existence of the directories ~/private~ and ~/private/foo~ on the user's file
+system, information the user might not have intended to share.
 
-** Electron
-   DEADLINE: <2017-04-25 Tue>
+# Makes no sense for a local server.
+A local server is a server on a user's own machine, while a remote server is
+located on another machine. When browsing a webpage served by a remote server
+the browser security feature that obfuscates file paths makes sense, it is a
+security concern to be sharing details of our filesystem with a remote server.
+Recalling from the background chapter on \thp{}, a \thp{} application uses a
+local server to serve the application as a webpage. In this case of browsing a
+webpage served by a local server the browser security feature does not make
+sense. We do not want to hide file paths from our own application.
 
-** Electron Packager
+# TODO local application image.
 
-** Directory Selection
-   DEADLINE: <2017-04-26 Wed>
+# Remove the security feature.
+In order for a \thp{} application to receive the correct file path, the user
+needs to view the application in a browser which does not obfuscate the file
+path. We can solve this by shipping a browser as part of our \thp{} application
+which has this security feature removed.
+
+*** Electron
+
+# REF https://electron.atom.io/docs/tutorial/about/
+# What is Electron?
+Electron is a framework for creating native applications with web technologies
+like JavaScript, HTML, and CSS. To display applications Electron uses a modified
+version of the Chromium browser. Of particular interest, Electron's modified
+browser removes many security features found in most browsers. Included in the
+removed security features is file path obfuscation. This means that when a user
+is browsing a webpage through Electron's browser and selects a file, the server
+serving the webpage will receive the correct file path and not something of the
+form ~C:/fakepath/<name>~.
+
+# Fixing file selection and consistent UX.
+If we could integrate Electron with \thp{} applications, such that Electron's
+browser is used to display a \thp{} application, then we could correctly
+implement file selection due to Electron's browser not obfuscating file paths.
+Another benefit of displaying \thp{} applications using Electron's browser is
+that users would have a consistent user experience. The reason for this is that
+all user's would be using the same browser
+
+
+the it would allow us to implement file
+selection correctly in \thp{} applications. Furthermore, by including Electron
+as part of \thp{} applications,
+
+# Open issue and pull request.
+
+*** Implementation
+
+*** Electron Packager
+
+*** Directory Selection
 
 ** Functional Reactive Programming
    DEADLINE: <2017-04-27 Thu>
@@ -802,12 +853,20 @@ file system structure of a user.
 ** Web Development Libraries
    DEADLINE: <2017-04-30 Sun>
    
-* Reflections
-  DEADLINE: <2017-05-01 Mon>
+* Reflection
+
+** \thp{}
+
+Paragraph on slow development loop where we compile, view changes, edit,
+re-compile... In contrast with modern web development where we can have
+hot-reloading of changed modules.
+
+Paragraph on \thp{} being maintainable due to small code base, and solving
+problems of traditional GUI libraries.
 
 ** Conclusion
-*** Edit-Compile-Evaluate
-*** Threepenny-gui's Future
+
+Paragraph on goal accomplishment.
 
 * Appendices
 
@@ -817,7 +876,6 @@ file system structure of a user.
 
 * Final LaTeX                                                        :ignore:
 
-# Link to our bibliography file, bibliography shown here.
 bibliography:~/bibliography/references.bib
 
 \appendix
