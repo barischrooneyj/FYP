@@ -34,6 +34,8 @@
 * Background
 ** Existing Software
 
+cite:Nobody06
+
 \utp{} is an existing computer application which is a Theorem Proving Assistant
 for the Unifying Theory of Programming. "Theorem Proving Assistant" means it can
 be used to assist the development of theorems, the theorems in question are
@@ -718,24 +720,24 @@ UI.div # setFlex parentProps #+ [
 
 # Directory selection necessary.
 When a user runs the existing \utp{} application for the first time the first
-thing presented to the user is a file selection dialog. This dialog asks the
-user to select a directory which will be the user's workspace while using the
-application. The workspace contains files that preserve \utp{} state which will
-be loaded again the next time the user starts the application. For this reason
-it is necessary to be able to accomplish directory selection with \thp{}.
+thing presented to the user is a file selection dialog. The dialog asks the user
+to select a directory, which will be the application's workspace, the workspace
+contains files that persist application state. Because of their existing use in
+\utp{}, it is necessary to be able to implement directory selection dialogs with
+\thp{}.
 
-#+CAPTION: Selecting a workspace in \utp{}.
+#+CAPTION: Workspace selection in \utp{}.
 #+NAME: fig:wxhaskell-utp2-workspace-selection
 TODO image of workspace selection.
 
 # Not a Threepenny problem, a HTML problem.
-\thp{} does not itself present any facilities for achieving directory selection.
-This again, similar to a right-click menu, seems like fundamental functionality
-that a GUI library should provide. In fact to implement directory selection, we
-must take a similar approach as we did with building a right-click menu. Because
-\thp{} is a wrapper around existing web technologies, leveraging their power,
-the problem of implementing directory selection using \thp{} instead becomes a
-problem of implementing directory selection using web technologies.
+\thp{} does not itself present any facilities for implementing directory
+selection. This again, similar to a right-click menu, seems like fundamental
+functionality that a GUI library should provide. In fact to implement directory
+selection, we must take a similar approach as we did with building a right-click
+menu. Because \thp{} is a wrapper around existing web technologies, the problem
+of implementing directory selection with \thp{} is instead a problem of
+implementing directory selection using web technologies.
 
 # TERM web technologies.
 
@@ -747,8 +749,7 @@ limitation of what the user is allowed to select. In HTML, the code for a
 directory selector and file selector are very similar, in fact a directory
 selector is simply a file selector with one additional attribute, see listings
 [[list:html-file-selector]] and [[list:html-directory-selector]]. For this reason we
-will first attempt to build a file selector in \thp{}, and will later return to
-building a directory selector.
+will first attempt to build a file selector in \thp{}.
 
 #+CAPTION: A file selector in HTML.
 #+NAME: list:html-file-selector
@@ -764,23 +765,22 @@ building a directory selector.
 
 *** Implementation
 
-# First attempt and error.
-Our first attempt at building a file selector with \thp{} is to write code which
-results in listing [[list:html-file-selector]] in the browser, when a user selects a
-file we will print the file path to stdout. This is easy to accomplish with
-\thp{} and is shown in [[list:threepenny-file-selector]]. Unfortunately, this code
-does not print the correct file path to stdout. When a user runs the application
-and selects a file such as ~/Users/foo/bar.txt~ the file path
-~C:\fakepath\bar.txt~ is printed to stdout.
+# Incorrect file path.
+We can easily enough write a \thp{} application that results in a file selector
+as in listing [[list:html-file-selector]], and prints the path of a selected file to
+stdout. Unfortunately, when running the application this will not print the file
+path we expect to stdout. When a user runs the application and selects a file
+such as ~/Users/foo/bar.txt~ the file path ~C:\fakepath\bar.txt~ is printed to
+stdout.
 
-#+CAPTION: File selector in \thp{} that prints file path to stdout.
-#+LABEL: 
 # Browser security.
 The reason that ~C:\fakepath\foo.txt~ is printed to stdout is because of a
-security feature that is present in all major browsers. Consider you are
-browsing a website ~example.com~ and are prompted to select a file. You
-select the file ~
-
+security feature that is present in all major browsers. If you are browsing a
+website, are prompted to select a file and select some file, the server can only
+receive the file contents and the file name. The file path is obfuscated to
+appear as ~c\fakepath\<name>~ where ~<name>~ is the file name. The reason for
+not revealing the full file path is so that the server cannot learn about the
+file system structure of a user.
 
 ** Electron
    DEADLINE: <2017-04-25 Tue>
@@ -815,6 +815,9 @@ select the file ~
 ** threepenny-gui-contextmenu
 ** threepenny-gui-flexbox
 
+* Final LaTeX                                                        :ignore:
+
+# Link to our bibliography file, bibliography shown here.
 bibliography:~/bibliography/references.bib
 
 \appendix
