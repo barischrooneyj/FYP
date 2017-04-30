@@ -1,5 +1,4 @@
-# Set documentclass in org. Otherwise if we set it in preamble then org will
-# generate a second documentclass itself, causing a LaTeX compiler error.
+# Set documentclass in org. Otherwise if we set it in preamble then org will generate a second documentclass itself, causing a LaTeX compiler error.
 #+LATEX_CLASS: report
 
 # Include LaTeX preamble.
@@ -52,7 +51,7 @@ do so by building on top of an existing GUI library REF, and thus avoid the
 majority of the burden of developing a GUI library themselves REF.
 
 #+CAPTION: Existing \utp{} home screen.
-[[images/existing-utp2-home-screen.png]]
+[[./images/existing-utp2-home-screen.png]]
 
 ** Existing Issues
 *** Object Oriented Concepts
@@ -168,7 +167,7 @@ application XCode which on my machine weighs in at 10.46GB.
 *** Difficult to Package
 
 A goal of Andrew Butterfield's while developing \utp{} was to reach a point
-where operating system native applications of \utp{} could be distributed
+where standalone applications of \utp{} could be distributed
 e.g. ~.deb~ packages for Debian or ~.app~ bundles for macOS, or if not native
 applications then at least executables. This proved difficult for the existing
 project as it was not being successfully built on macOS and was difficult to
@@ -182,7 +181,7 @@ Students at TCD have successfully built it on Linux (Ubuntu). It should run in
 principle on Max OS X as well, but I have not been able to get this to work
 (help would be appreciated).
 
-    -- scss.tcd.ie/Andrew.Butterfield/Saoithin
+-- scss.tcd.ie/Andrew.Butterfield/Saoithin
 #+END_QUOTE
 
 *** Conclusion
@@ -214,7 +213,7 @@ standard one and all are more or less incomplete. In general, low-level veneers
 are going well, but they are low level. High-level abstractions are pretty
 experimental. There is a need for a supported medium-level GUI library.
 
-    -- wiki.haskell.org/Applications_and_libraries/GUI_libraries
+-- wiki.haskell.org/Applications_and_libraries/GUI_libraries
 #+END_QUOTE
 
 *** \thp{}
@@ -230,12 +229,12 @@ with wxHaskell.
 # Avoiding GUI dependencies.
 How does \thp{} display things on-screen? \thp{} does not create bindings to any
 system calls to display a GUI, this means that \thp{} applications are not
-operating system native applications. \thp{}'s key distinguishing factor is that
+standalone applications. \thp{}'s key distinguishing factor is that
 it uses the web browser as a display. Web pages like docs.google.com are
 examples of powerful web applications, applications that use the web browser to
 display a GUI. There are many powerful web applications that provide an
 experience that is not compromised because the application was written as a web
-application instead of as an operating system native application. A notable part
+application instead of as an standalone application. A notable part
 of the experience when using a web application like Google Docs is that an
 installation is not required, a web browser which is the necessary software to
 display the GUI, is something which most people already have installed. \thp{}
@@ -716,7 +715,7 @@ UI.div # setFlex parentProps #+ [
   ]
 #+END_SRC
 
-** Directory Selection
+** File Selection
 
 *** Background
 
@@ -767,7 +766,7 @@ will first attempt to build a file selector in \thp{}.
 <input type="file" webkitdirectory>
 #+END_SRC
 
-*** A Solution to File Selection
+*** Solution
 
 # Incorrect file path.
 We can quite easily write a \thp{} application that results in a file selector
@@ -805,53 +804,124 @@ sense. We do not want to hide file paths from our own application.
 In order for a \thp{} application to receive the correct file path, the user
 needs to view the application in a browser which does not obfuscate the file
 path. We can solve this by shipping a browser as part of our \thp{} application
-which has this security feature removed.
+which has this security feature removed, this solution is discussed in the next
+chapter.
 
-*** Electron
+** Electron
+
+*** Background
 
 # REF https://electron.atom.io/docs/tutorial/about/
 # What is Electron?
-Electron is a framework for creating native applications with web technologies
-like JavaScript, HTML, and CSS. To display applications Electron uses a modified
-version of the Chromium browser. Of particular interest, Electron's modified
-browser removes many security features found in most browsers. Included in the
-removed security features is file path obfuscation. This means that when a user
-is browsing a webpage through Electron's browser and selects a file, the server
-serving the webpage will receive the correct file path and not something of the
-form ~C:/fakepath/<name>~.
+Electron is a framework for creating standalone applications with web
+technologies. To display applications, Electron uses a modified version of the
+Chromium browser. Of particular interest, Electron's modified browser removes
+many security features found in most browsers. Included in the removed security
+features is file path obfuscation. This means that when a user is browsing a
+webpage through Electron's browser and selects a file, the server serving the
+webpage will receive the correct file path and not something of the form
+~C:/fakepath/<name>~.
 
-# Fixing file selection and consistent UX.
-If we could integrate Electron with \thp{} applications, such that Electron's
-browser is used to display a \thp{} application, then we could correctly
-implement file selection due to Electron's browser not obfuscating file paths.
-Another benefit of displaying \thp{} applications using Electron's browser is
-that users would have a consistent user experience. The reason for this is that
-all user's would be using the same browser
+# Electron fixes file selection, and consistent user experience.
+Our goal is to integrate Electron with our \thp{} application, so Electron's
+browser displays the application. After integrating Electron we can correctly
+implement file selection because Electron's browser does not obfuscate file
+paths, allowing the \thp{} server to receive correct file path. Another benefit
+of displaying \thp{} applications with Electron's browser is a consistent user
+experience. The reason for this is that all users would be viewing our \thp
+application using Electron's browser; instead of their own installed browser,
+which may be different for each user. Browser's have different levels of support
+for web standards which results in a inconsistent user experience. Figure
+[[fig:browser-button-difference]] shows the differences in how browsers display a
+button.
 
+#+CAPTION: Firefox (left) and Chrome (right) displaying a button.
+#+NAME: fig:browser-button-difference
+[[./images/todo.png]]
 
-the it would allow us to implement file
-selection correctly in \thp{} applications. Furthermore, by including Electron
-as part of \thp{} applications,
+# Open issue.
+Using Electron to provide standalone applications is an open issue on the \thp{}
+repository, issue ~#111~. There are three chronological steps to issue ~#111~.
+The first step is using Electron to display a \thp{} application. The second
+step is being able to package the \thp{} application as a standalone application
+so that it can be easily distributed without having to compile code or even
+touch the command line at all. Finally step three is to write a Haskell package
+to automate the first two steps.
 
-# Open issue and pull request.
+*** Electron Integration
 
-*** Implementation
+# Integrating Electron is not so simple.
+To display our \thp{} application with Electron we cannot simply ask a user to
+download Electron's browser and view our \thp{} application with it. This is
+because Electron's browser cannot be downloaded as a standalone application,
+instead Electron provides an API for managing browser windows. Electron provides
+its own JavaScript runtime which exposes this API. To open an Electron browser
+window we have to write a JavaScript script that includes a call to the Electron
+API that opens a browser window.
 
-*** Electron Packager
+# Overview of script.
+We wrote the necessary JavaScript script to display a \thp{} application using
+Electron. This script first executes the compiled \thp{} application, which
+starts the \thp{} application's server on a random free port ~PORT~. The script
+waits until the server is running then opens an Electron browser window pointing
+at ~localhost:<PORT>~. Finally the script manages shutdown of the application,
+for example we have to consider the expected behaviour on macOS where clicking
+the red 'x' on an application's window should only close the window but leave
+the process running.
+
+# Electron Packager.
+Electron Packager is a tool for packaging applications built with Electron into
+standalone applications. Now that we have our \thp{} application being displayed
+using Electron we can use Electron Packager to create a standalone application
+for the current platform e.g. ~.deb~ packages for Debian or ~.app~ bundles for
+macOS. The standalone application produced includes binaries of Electron and our
+\thp{} application.
+
+# TERM platform
+
+# Pull Request.
+We sent pull request #169 to the \thp{} repository. The pull request includes
+the necessary script to display a \thp{} application using Electron, a guide on
+how to integrate a \thp{} with Electron using the script, and a link to a
+respository we setup which contains a minimal working example. After addressing
+initial feedback the pull request was accepted. The pull request addresses the
+first two steps of issue #111, it doesn't automate the process but it instructs
+users how to build and package \thp{} applications with Electron.
+
+#+BEGIN_QUOTE
+Thanks a lot for this!
+
+-- Heinrich Apfelmus on Pull Request #169
+#+END_QUOTE
 
 *** Directory Selection
 
+# A single attribute.
+Now that our \thp{} application can be displayed using Electron, file selection
+works correctly, however we still need to accomplish directory selection.
+Revisiting [[fig:html-file-selector]] and [[fig:html-directory-selector]] we can see
+that the difference is only a single attribute, namely ~webkitdirectory~.
+
+# Not exposed, need to fork.
+Setting attributes on a HTML element is done in \thp{} by invoking a specific
+function for each attribute. However \thp{} only provides functions for setting
+a handful of attributes, and does not expose the functions for writing our own
+attribute setting functions. We forked the \thp{} repository to expose the
+functions which allow us to write our own attribute setting function. Now using
+this fork we can write a function to set the ~webkitdirectory~ attribute on a
+file selector to turn it into a directory selector.
+
+# TERM fork
+
 ** Functional Reactive Programming
-   DEADLINE: <2017-04-27 Thu>
 
 ** Abstract GUI Layer
-   DEADLINE: <2017-04-28 Fri>
 
-** Conflicting Architectures
-   DEADLINE: <2017-04-29 Sat>
+** Integrating with Existing \utp{}
+
+Difficulty 
    
 ** Web Development Libraries
-   DEADLINE: <2017-04-30 Sun>
    
 * Reflection
 
@@ -862,7 +932,7 @@ re-compile... In contrast with modern web development where we can have
 hot-reloading of changed modules.
 
 Paragraph on \thp{} being maintainable due to small code base, and solving
-problems of traditional GUI libraries.
+problems of traditional GUI libraries. Strong future.
 
 ** Conclusion
 
@@ -871,8 +941,19 @@ Paragraph on goal accomplishment.
 * Appendices
 
 ** Terminology
+
 ** threepenny-gui-contextmenu
+
+Include README.
+
 ** threepenny-gui-flexbox
+
+Here follows the README of the Haskell package \tgf{}, compiled from GitHub
+markdown to LaTeX using ~pandoc~.
+
+** Better Events
+
+** Pull Requests and Issues
 
 * Final LaTeX                                                        :ignore:
 

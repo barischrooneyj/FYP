@@ -1,0 +1,10 @@
+* TODO Citations
+* TODO Figures
+* TODO TCD logo
+* TODO Acknowledgements
+* TODO threepenny-gui-flexbox
+* TODO FRP section 
+* TODO Terminology
+* TODO UTP2 justification citation
+* TODO Send to Andrew for feedback
+* TODO Finish
