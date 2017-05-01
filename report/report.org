@@ -893,10 +893,10 @@ does not provide an ASF for the ~webkitdirectory~ attribute.
 # Need to fork.
 We might consider writing our own ASF for ~webkitdirectory~, however \thp{} does
 not expose the functions used to write ASFs. We forked the \thp{} repository to
-expose these functions used to write ASFs. Now using this fork we can write an
-ASF for the ~webkitdirectory~ attribute, and then set the attribute on a file
-selector to turn it into a directory selector. Figures [[fig:thp-workspace-dir]]
-shows a directory selector in use, note that files are grayed out.
+expose the functions used to write ASFs. With the fork we can write an ASF for
+the ~webkitdirectory~ attribute, and now set the attribute on a file selector to
+turn it into a directory selector. Figures [[fig:thp-workspace-dir]] shows a
+directory selector in use, note that files are grayed out.
 
 # TERM fork
 
@@ -945,6 +945,8 @@ Include README.
 
 Here follows the README of the Haskell package \tgf{}, compiled from GitHub
 markdown to LaTeX using ~pandoc~.
+
+#+INCLUDE: "./threepenny-gui-flexbox.org" :minlevel 3
 
 ** Better Events
 
