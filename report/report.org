@@ -39,18 +39,20 @@ for the Unifying Theory of Programming. "Theorem Proving Assistant" means it can
 be used to assist the development of theorems, the theorems in question are
 related to the "Unifying Theory of Programming". The application is written in
 Haskell, with a graphical user interface (GUI) built with the mature wxHaskell
-library. \utp{} has been in development since at least March 2010 which is when
-the source originally appears on BitBucket. \utp{} was formerly known as
-Saoithín.
+library. \utp{} has been in development since at least March 2010 when the
+source originally appears on BitBucket, cite:SaoithinInitialCommit. \utp{} was
+formerly known as Saoithín.
 
-WxHaskell is a GUI library for Haskell that was started in July 2003 REF but
-moved to its current repository in January 2007 REF when the project was taken
-over by a new set of maintainers. The goal of the project is to provide an
-"industrial strength GUI library" for Haskell REF. The wxHaskell team attempt to
-do so by building on top of an existing GUI library REF, and thus avoid the
-majority of the burden of developing a GUI library themselves REF.
+WxHaskell is a GUI library for Haskell that was started as early as July 2003,
+cite:wxHaskellInitialCommit. Though wxHaskell's official history only begins in
+January 2007 when the project was taken over by a new set of maintainers,
+cite:OldwxHaskellnews. The goal of wxhaskell is to provide an industrial
+strength GUI library for Haskell, the wxHaskell team attempt to do so by
+building on top of an existing GUI library, and thus avoid the majority of the
+burden of developing a GUI library themselves, cite:leijen2004wxhaskell.
 
 #+CAPTION: Existing \utp{} home screen.
+#+NAME: fig:existing-utp-home-screen
 [[./images/existing-utp2-home-screen.png]]
 
 ** Existing Issues
@@ -72,23 +74,21 @@ of a button its type in wxHaskell is ~Window (CControl (CButton ()))~ which
 encodes some of the inheritance relationship.
 
 wxHaskell consists of four key libraries, only two of which are typically used
-by a wxHaskell programmer. The lesser used of these is wxcore which is a set of
-low-level Haskell bindings to wxc where wxc is a C language binding for
-wxWidgets. The more used is wx which is a set of higher-level wrappers over
-wxcore. Most wxHaskell software is about eighty percent wx and twenty percent
-wxcore.
-
-# REF https://wiki.haskell.org/Haskell
+by a wxHaskell programmer. The lesser used of these is wxcore which provides
+low-level Haskell bindings to wxWidgets. The more used is wx which is a set of
+higher-level wrappers over wxcore. Most wxHaskell software is about eighty
+percent wx and twenty percent wxcore, cite:wxHaskellWiki.
 
 We have described how wxHaskell exposes object oriented concepts of the
 wxWidgets library which it wraps, both through encoding inheritance and the
-low-level bindings of wxcore. The reason all of this is unfavourable is because
-as programmers we have some choice in the languages we use, and a functional
-language like Haskell is chosen because it makes it easier to produce flexible,
-maintainable, high-quality software REF. Re-introducing concepts from languages
-that were not chosen is a compromise. Analogously if you were an object oriented
-programmer and were told that you are now only allowed to use sequential
-statements you probably would not be too happy.
+low-level bindings of wxcore. This is unfavourable because as programmers we
+have some choice in the languages we use, we choose a language because of
+features that appeal to us. We might choose a functional language like Haskell
+because features of the language such as lazy evaluation and higher-order
+functions allow us to write highly modular programs, programs that are much
+smaller and easier to write than conventional ones, cite:hughes1989functional.
+It is a compromise to be exposed to features from a language that we did not
+choose.
 
 While we can argue the merits of functional programming it is worth noting that
 Haskell and C++ are two solutions to different problems, they each solve their
@@ -148,7 +148,7 @@ is reflected in the commit message:
 # TERM commit message
 
 #+BEGIN_QUOTE
-UTP2 NOW BUILDS WITH stack ON OS X 10.11.16 !!!!
+UTP2 NOW BUILDS WITH stack ON OS X 10.11.16 !!!! 
 #+END_QUOTE
 
 It is worth noting two things here. One is that the difficulty of getting \utp{}
@@ -198,14 +198,13 @@ hoped would alleviate all of the problems associated with wxHaskell.
 Unfortunately the state of GUI programming in Haskell is not in a great place.
 There do exist many GUI libraries but they tend to fall into one of two
 categories. Some provide direct access to GUI facilities through bindings to an
-imperative library, wxHaskell falls into this category. Most of the more
-powerful GUI libraries fall into this category, because they can leverage the
-existing power of the imperative language they provide a binding to. Others
-present more high-level programming interfaces, and have a more declarative,
-functional feel. These libraries tend to not provide GUI support directly but
-rely on a library like wxHaskell to provide the necessary GUI bindings.
-
-# REF http://conal.net/papers/genuinely-functional-guis.pdf
+imperative library, others present more high-level programming interfaces and
+have a more declarative, functional feel, cite:courtney2001genuinely. wxHaskell
+falls into the first category, of bindings to an imperative library. Most of the
+more powerful GUI libraries fall into this category, because they can leverage
+the power of the imperative language they provide a binding to. Libraries in the
+second category, high-level libraries, tend to not provide GUI support directly
+but rely on a library like wxHaskell to provide the necessary GUI bindings.
 
 #+BEGIN_QUOTE
 There is a large number of GUI libraries for Haskell. Unfortunately there is no
@@ -213,7 +212,7 @@ standard one and all are more or less incomplete. In general, low-level veneers
 are going well, but they are low level. High-level abstractions are pretty
 experimental. There is a need for a supported medium-level GUI library.
 
--- wiki.haskell.org/Applications_and_libraries/GUI_libraries
+-- cite:HaskellWikiGuiLibraries 
 #+END_QUOTE
 
 *** \thp{}
@@ -297,7 +296,6 @@ widely prevalent technologies do the heavy lifting.
 
 *** Introduction
 
-# Reference section.
 As the project progressed flaws of \thp{} were discovered and addressed. This
 required making modifications to \thp{}'s source code. In light of this it is
 beneficial to have a deeper understanding of how \thp{} operates, which will
@@ -310,13 +308,14 @@ an in-depth walk-through of a small \thp{} application.
 # Browser as a display.
 \thp{} uses the web browser as a display. This means that a user views a \thp{}
 application in their browser, and what is rendered in their browser is HTML and
-CSS, which can be manipulated by JavaScript. To solidify this idea that a \thp{}
-application is ultimately HTML and CSS the screenshot below shows a simple
-\thp{} application being displayed in a web browser. The web browser's developer
-tools are open to show the HTML structure of the application, which can be seen
-on the right.
+CSS, which can be manipulated by JavaScript. To solidify the idea that a \thp{}
+application is ultimately HTML and CSS, Figure [[fig:threepenny-is-html]] shows a
+simple \thp{} application being displayed in a browser. The browser's developer
+tools are open, showing the HTML structure of the application.
 
-# TODO Screenshot
+#+CAPTION: HTML structure of a \thp{} application.
+#+NAME: fig:threepenny-is-html
+[[./images/threepenny-is-html.png]]
 
 # Manipulations by JavaScript.
 The screenshot above shows how a \thp{} application consists of HTML. However it
@@ -355,35 +354,33 @@ We now have an overview of how a \thp{} application is displayed in the browser,
 including conversion to JavaScript code and how browser events such as button
 clicks are handled. We will now look at the life-cycle of a \thp{} in more
 detail, by looking at a minimal working \thp{} application. While working our
-way through the application we will be referring to the image below which
-describes the life-cycle of a \thp{} application.
+way through the application we will be referring to Figure [[fig:thp-life-cycle]]
+below which describes the life-cycle of a \thp{} application.
 
 #+CAPTION: Life cycle of a \thp{} application.
+#+NAME: fig:thp-life-cycle
 [[./images/threepenny-run-ui.png]]
 
+#+CAPTION: \thp{} served and viewed on the same machine.
+#+NAME: fig:local-server
+[[./images/local-server.png]]
+
 # Overview of minimal application.
-The Haskell code of the \thp{} application we will walk-through is below. In
-particular we are concerned with the four lines of the body of the function
-~app~. The remaining code is necessary boilerplate to achieve a full working
-application. The first line of ~app~ creates a button with text "Click me!". In
-the second line we attach that button to the HTML ~<body>~. The third line
-causes its body to be evaluated when a user clicks the button. The fourth line
-is what is then evaluated, it changes the button's text to "I have been
-clicked!".
+The Haskell code of the \thp{} application we will walk-through is in Listing
+[[list:minimal-app]] below. The first line of ~app~ creates a button with text
+"Click me!". In the second line we attach that button to the HTML ~<body>~. The
+third line causes its body to be evaluated when a user clicks the button. The
+fourth line is evaluated when a user clicks the button, changing the button's
+text to "I have been clicked!".
 
 # TERM boilerplate
 
+#+CAPTION: A minimal \thp{} application.
+#+NAME: list:minimal-app
 #+BEGIN_SRC haskell
-module Main where
-
-import qualified Graphics.UI.Threepenny      as UI
-import           Graphics.UI.Threepenny.Core
-
-main = startGUI defaultConfig app
-
-app window = do
+app = do
   button <- UI.button # set UI.text "Click me!"
-  getBody window #+ [element button]
+  askBody #+ [element button]
   on UI.click button $ \(x, y) ->
     element button # set UI.text "I have been clicked!"
 #+END_SRC
@@ -443,20 +440,14 @@ closes the browser tab or the server is killed.
 
 *** Background
 
-# TODO below is a screenshot, fix file-wide.
-
 # Why right-click menu first.
-Right-click menus are widely used in the existing \utp{} application, below is a
-screenshot showing a right-click menu on the application's home screen. Building
-a custom right-click menu using \thp{} represented, to some degree, an
-investigation into the feasibility of using \thp{} to build an entire GUI for
-\utp{}. This is both because a right-click menu is one of the more complex
-components of a GUI and also because of the widespread use of right-click menus
-in \utp{}.
-
-# TODO screenshot of right-click menu.
-
-# REF https://html.spec.whatwg.org/multipage/forms.html#context-menus
+Right-click menus are widely used in the existing \utp{} application, Figure
+[[fig:existing-utp-home-screen]] shows an example of a right-click menu on the
+application's home screen. Building a custom right-click menu using \thp{}
+represented, to some degree, an investigation into the feasibility of using
+\thp{} to build an entire GUI for \utp{}. This is both because a right-click
+menu is one of the more complex components of a GUI and also because of the
+widespread use of right-click menus in \utp{}.
 
 # Not supported by Threepenny-gui. 
 \thp{} does not provide a facility to build a right-click menu. You might
@@ -470,15 +461,10 @@ of building a right-click menu using web technologies.
 # Right-click menu using web technologies.
 Building a right-click menu using web technologies is not entirely
 straightforward either. There exists a HTML specification for building a
-right-click menu however it is only enabled by default by Mozilla's Firefox
-browser. Google's Chrome browser and Apple's Safari have implemented the
-specification however is must be enabled via a developer flag. Microsoft's Edge
-does not support the specification. This HTML specification for building a
-right-click menu only existed as a recommendation by Mozilla at the time of my
-investigation though it was accepted to the HTML Living Standard on January 17
-2017, however browser support is as previously mentioned.
-
-# https://dpogue.ca/articles/html5-menu.html
+right-click menu, cite:HtmlLivingStandard. However at the time of writing it is
+only enabled by default by Mozilla's Firefox browser. Google's Chrome browser
+and Apple's Safari have implemented the specification however is must be enabled
+via a developer flag, and Microsoft's Edge does not support the specification.
 
 *** Implementation
 
@@ -490,27 +476,29 @@ bit more work. JavaScript events, in particular the ~contextmenu~ event and how
 it can be used to build a right-click menu is explained below.
 
 # Event propagation.
-HTML consists of a tree of elements such as ~<body>~, ~<div>~ or ~<button>~, an
-example of HTML's tree structure is shown in the figure below. When a JavaScript
-event occurs at one of these elements it propagates upward through the tree of
-elements; downward propagation is also possible, though upward propagation is
-most common. For example when a user clicks on an element a ~click~ event is
-fired at that element and propagates upward through the tree of elements.
-JavaScript event handlers can be bound to elements, such that when an event
-propagates through an element it can trigger an event handler. This idea of
-event propagation and handling is very similar to the idea of exception
+HTML consists of a tree of elements such as ~<body>~, ~<p>~ or ~<button>~, an
+example of HTML's tree structure is shown in Figure [[fig:html-tree]]. When a
+JavaScript event occurs at one of these elements it propagates upward through
+the tree of elements; downward propagation is also possible, though upward
+propagation is most common. For example when a user clicks on an element a
+~click~ event is fired at that element and propagates upward through the tree of
+elements. JavaScript event handlers can be bound to elements, such that when an
+event propagates through an element it can trigger an event handler. This idea
+of event propagation and handling is very similar to the idea of exception
 propagation and capturing which is available in most programming languages.
 
-# REF http://www.computerhope.com/jargon/d/dom1.jpg
+#+CAPTION: Tree structure of a HTML document.
+#+NAME: fig:html-tree
+[[./images/html-tree.png]]
 
 # The contextmenu event.
-According to Mozilla's documentation "The ~contextmenu~ event is fired when the
+According to Mozilla's documentation, "The ~contextmenu~ event is fired when the
 right button of the mouse is clicked (before the context menu is displayed), or
-when the context menu key is pressed". This simply means that the ~contextmenu~
-event is fired when a user right-clicks, the context menu key mentioned refers
-to the fact that a user can simulate a right-click on some keyboards. An event
-handler for a ~contextmenu~ event is thus a function that will only be evaluated
-when a user right-clicks.
+when the context menu key is pressed", cite:MozillacontextmenuEvent. This simply
+means that the ~contextmenu~ event is fired when a user right-clicks, the
+context menu key mentioned refers to the fact that a user can simulate a
+right-click on some keyboards. An event handler for a ~contextmenu~ event is
+thus a function that will only be evaluated when a user right-clicks.
 
 # Design overview.
 To build a right-click menu we need to know two important things, when a user
@@ -530,15 +518,17 @@ menu we will display will simply be built from standard HTML elements such as
 
 # Implementation.
 We previously discussed writing an event handler in the background section on
-\thp{}, the relevant code is shown again below, here the event handler created
-would be triggered by a ~click~ event fired by the ~button~ element. To build a
-right-click menu we want to accomplish something similar but our event handler
-needs to be triggered by a ~contextmenu~ event instead of a ~click~ event. The
-problem was, at the time, \thp{} did not provide a ~UI.contextmenu~ function
-similar to ~UI.click~.
+\thp{}, the relevant code is shown again below in Figure
+[[fig:button-click-handler]], here the event handler created would be triggered by a
+~click~ event fired by the ~button~ element. To build a right-click menu we want
+to accomplish something similar but our event handler needs to be triggered by a
+~contextmenu~ event instead of a ~click~ event. The problem was, at the time,
+\thp{} did not provide a ~UI.contextmenu~ function similar to ~UI.click~.
 
 # TERM Pull Request
 
+#+CAPTION: Registering an event handler for clicks on a button.
+#+NAME: fig:button-click-handler
 #+BEGIN_SRC haskell
 on UI.click button $ \(x, y) ->
   -- event handler body
@@ -556,16 +546,11 @@ Now that \thp{} supports writing event handlers for ~contextmenu~ events the
 next step is to write a library which leverages that capability and allows a
 user to build right-click menus. We built a library called \tgc{} which is
 publicly available and provides this functionality. The README of \tgc{} is
-available as an appendix.
+included as an appendix.
 
-A custom right-click menu built with \tgc{}, some items in the right-click menu
-change the button's colour, other items open a nested menu.
-
-A custom right-click menu built for \utp{} using \tgc{}.
-
-# REF https://developer.mozilla.org/en/docs/Web/Events/contextmenu
-
-# REF https://developer.mozilla.org/en/docs/Web/Events/click
+#+CAPTION: A right-click menu in \utp{} using \thp{}.
+#+NAME: fig:right-click-thp-utp
+[[./images/right-click-threepenny-utp.png]]
 
 *** Feasibility 
 
@@ -576,9 +561,11 @@ a right-click, we need to prevent the ~contextmenu~ event from propagating
 further, otherwise the standard browser right-click menu would also be shown in
 addition to our custom right-click menu. Another difficult case when a user's
 mouse leaves a right-click menu, all nested menus are closed but the root menu
-remains open, as depicted below.
+remains open, as shown below in Figure [[fig:leave-right-click-menu]].
 
-# TODO image.
+#+CAPTION: Leaving a nested right-click menu.
+#+NAME: fig:leave-right-click-menu
+[[./images/leave-right-click-menu.png]]
 
 We mentioned at the beginning of this chapter that building a custom right-click
 menu using \thp{} represented, to some degree, an investigation into the
@@ -596,8 +583,6 @@ space, is a large positive.
 ** Layout
 
 *** Background
-
-# TODO Navbar and main viewing are image.
 
 # An unavoidable consideration.
 What is displayed in a GUI is, at a high-level of abstraction, simply a set of
@@ -621,7 +606,7 @@ interfaces. This is a blessing, but it can also be a curse, so the library
 includes a few layout combinators to quickly create user interfaces without the
 need to deal with the mess that is CSS.
 
--- https://wiki.haskell.org/Threepenny-gui
+-- cite:Threepenny-guiWiki
 #+END_QUOTE
 
 # HTML table image.
@@ -639,16 +624,12 @@ changes dynamically".
 
 *** Flexbox
 
-# REF https://www.w3.org/TR/css-flexbox-1/
-
 # Power of Flexbox.
-Flexible box, or Flexbox, is a CSS specification which was introduced as a
-recommendation by W3C in May 2016, and is currently supported by all major
-browsers. Flexbox provides a means for writing responsive layouts, Flexbox
-allows elements to grow to fill available space, or to shrink to avoid overflow.
-We can also do more complex things like specify that elements should have sizes
-according to a certain ratio, or have elements wrap onto new lines if there is
-not enough space on the current line.
+Flexbox, is a CSS specification for writing responsive layouts, it allows
+elements to grow to fill available space, or to shrink to avoid overflow,
+cite:atkins2013css. We can also do more complex things like specify that
+elements should have sizes according to a certain ratio, or have elements wrap
+onto new lines if there is not enough space on the current line.
 
 #+BEGIN_QUOTE
 In the flex layout model, the children of a flex container can be laid out in
@@ -656,7 +637,7 @@ any direction, and can “flex” their sizes, either growing to fill unused spa
 or shrinking to avoid overflowing the parent. Both horizontal and vertical
 alignment of the children can be easily manipulated.
 
--- Flexible Box Layout, W3C Candidate Recommendation, 26 May 2016
+-- cite:atkins2013css 
 #+END_QUOTE
 
 #+CAPTION: Using Flexbox to wrap elements onto a newline.
@@ -667,10 +648,10 @@ alignment of the children can be easily manipulated.
 # Justification.
 Heinrich Apfelmus appears in favour of Flexbox, writing that Flexbox "apperas to
 solve most of the layout woes. Flexboxes may be a good start for implementing
-proper layout combinators in Haskell". Because Flexbox would allow us to write
-responsive layouts for \utp{} and because it is a direction for \thp{} that
-Apfelmus in in favour of, we decide to write a library to add Flexbox support to
-\thp{}.
+proper layout combinators in Haskell", cite:Threepenny-guiIssue70. Because
+Flexbox would allow us to write responsive layouts for \utp{} and because it is
+a direction for \thp{} that Apfelmus in in favour of, we decide to write a
+library to add Flexbox support to \thp{}.
 
 # Flexbox properties.
 Flexbox is a CSS specification, this means Flexbox layouts are written using CSS
@@ -679,14 +660,14 @@ correct CSS properties to a parent element and its children elements. Figure
 [[fig:flex-ratio]] shows three elements in a ratio of 1:2:1; this is a responsive
 layout written with Flexbox, meaning that the ratio of the elements will be
 maintained on different screen sizes. The HTML code with the necessary CSS
-properties to achieve figure [[fig:flex-ratio]] is shown in listing [[list:flex-ratio]],
+properties to achieve Figure [[fig:flex-ratio]] is shown in listing [[list:flex-ratio]],
 note that some additional styling code is not shown.
 
 #+CAPTION: Three elements in ratio 1:2:1
 #+NAME: fig:flex-ratio
 [[./images/flex-ratio.png]]
 
-#+CAPTION: HTML code for figure [[fig:flex-ratio]]
+#+CAPTION: HTML code for Figure [[fig:flex-ratio]]
 #+NAME: list:flex-ratio
 #+BEGIN_SRC html
 <div style="display: flex;">
@@ -701,11 +682,11 @@ We published a library called \tgf{} which is in Stack. \tgf{} provides a method
 of writing Flexbox CSS properties and converting them to the format expected by
 \thp{}, also included in the library are functions which provide abstractions
 for common patterns. For more detail \tgf{}'s README is attached as an appendix.
-The code to achieve figure [[fig:flex-ratio]] using \thp{} and \tgf{} instead of
+The code to achieve Figure [[fig:flex-ratio]] using \thp{} and \tgf{} instead of
 HTML is shown in listing [[list:flex-ratio-tgf]], again note that some additional
 styling code is not shown.
 
-#+CAPTION: \thp{} code for figure [[fig:flex-ratio]]
+#+CAPTION: \thp{} code for Figure [[fig:flex-ratio]]
 #+NAME: list:flex-ratio-tgf
 #+BEGIN_SRC haskell
 UI.div # setFlex parentProps #+ [
@@ -729,10 +710,6 @@ workspace is a directory which contains files that persist application state.
 Because of their existing use in \utp{}, it is necessary to be able to implement
 directory selection dialogs with \thp{}.
 
-#+CAPTION: Workspace selection in \utp{}.
-#+NAME: fig:wxhaskell-utp2-workspace-selection
-TODO image of workspace selection.
-
 # Not a Threepenny problem, a HTML problem.
 \thp{} does not itself present any facilities for implementing directory
 selection. This again, similar to a right-click menu, seems like fundamental
@@ -747,12 +724,12 @@ implementing directory selection using web technologies.
 # A HTML solution.
 Directory selection and file selection are very similar as far as a user is
 concerned, in both cases the user is presented with a window like the one in
-figure [[fig:wxhaskell-utp2-workspace-selection]], the only difference is the
-limitation of what the user is allowed to select. In HTML, the code for a
-directory selector and file selector are very similar, in fact a directory
-selector is simply a file selector with one additional attribute, see listings
-[[list:html-file-selector]] and [[list:html-directory-selector]]. For this reason we
-will first attempt to build a file selector in \thp{}.
+Figure [[fig:thp-workspace-dir]], the only difference is the limitation of what the
+user is allowed to select. In HTML, the code for a directory selector and file
+selector are very similar, in fact a directory selector is simply a file
+selector with one additional attribute, see listings [[list:html-file-selector]] and
+[[list:html-directory-selector]]. For this reason we will first attempt to build a
+file selector in \thp{}.
 
 #+CAPTION: A file selector in HTML.
 #+NAME: list:html-file-selector
@@ -794,11 +771,10 @@ located on another machine. When browsing a webpage served by a remote server
 the browser security feature that obfuscates file paths makes sense, it is a
 security concern to be sharing details of our filesystem with a remote server.
 Recalling from the background chapter on \thp{}, a \thp{} application uses a
-local server to serve the application as a webpage. In this case of browsing a
-webpage served by a local server the browser security feature does not make
-sense. We do not want to hide file paths from our own application.
-
-# TODO local application image.
+local server to serve the application as a webpage, see Figure [[][ and [[]]. In
+this case of browsing a webpage served by a local server the browser security
+feature does not make sense. We do not want to hide file paths from our own
+application.
 
 # Remove the security feature.
 In order for a \thp{} application to receive the correct file path, the user
@@ -811,7 +787,6 @@ chapter.
 
 *** Background
 
-# REF https://electron.atom.io/docs/tutorial/about/
 # What is Electron?
 Electron is a framework for creating standalone applications with web
 technologies. To display applications, Electron uses a modified version of the
@@ -831,13 +806,18 @@ of displaying \thp{} applications with Electron's browser is a consistent user
 experience. The reason for this is that all users would be viewing our \thp
 application using Electron's browser; instead of their own installed browser,
 which may be different for each user. Browser's have different levels of support
-for web standards which results in a inconsistent user experience. Figure
-[[fig:browser-button-difference]] shows the differences in how browsers display a
-button.
+for web standards which results in a inconsistent user experience. Table
+[[table:browser-support]] shows scores of different browsers for their support of
+the HTML 5 specification.
 
-#+CAPTION: Firefox (left) and Chrome (right) displaying a button.
-#+NAME: fig:browser-button-difference
-[[./images/todo.png]]
+#+CAPTION: Browser scores for support of HTML5, from html5test.com on 01-05-2017.
+#+NAME: table:browser-support
+| Browser     | Score |
+|-------------+-------|
+| Chrome 57   |   519 |
+| Firefox 52  |   474 |
+| Edge 15     |   473 |
+| Safari 10.1 |   406 |
 
 # Open issue.
 Using Electron to provide standalone applications is an open issue on the \thp{}
@@ -892,7 +872,7 @@ in the pull request is included as an appendix.
 #+BEGIN_QUOTE
 Thanks a lot for this!
 
--- @HeinrichApfelmus on Pull Request #169
+-- cite:Threepenny-guiPR169
 #+END_QUOTE
 
 *** Directory Selection
@@ -900,10 +880,8 @@ Thanks a lot for this!
 # A single attribute.
 Now that our \thp{} application can be displayed using Electron, file selection
 works correctly, however we still need to accomplish directory selection.
-Revisiting [[fig:html-file-selector]] and [[fig:html-directory-selector]] we can see
+Revisiting [[list:html-file-selector]] and [[list:html-directory-selector]] we can see
 that the difference is only a single attribute, namely ~webkitdirectory~.
-
-# REF http://hackage.haskell.org/package/threepenny-gui-0.8.0.0/docs/Graphics-UI-Threepenny-Attributes.html
 
 # Not set using \thp{}.
 Setting attributes on a HTML element is done in \thp{} by calling a specific
@@ -917,9 +895,18 @@ We might consider writing our own ASF for ~webkitdirectory~, however \thp{} does
 not expose the functions used to write ASFs. We forked the \thp{} repository to
 expose these functions used to write ASFs. Now using this fork we can write an
 ASF for the ~webkitdirectory~ attribute, and then set the attribute on a file
-selector to turn it into a directory selector.
+selector to turn it into a directory selector. Figures [[fig:thp-workspace-dir]]
+shows a directory selector in use, note that files are grayed out.
 
 # TERM fork
+
+#+CAPTION: Workspace selection prompt in \utp{}.
+#+NAME: fig:thp-workspace-prompt
+[[./images/workspace-select-1.png]]
+
+#+CAPTION: Workspace directory selection, follows on from Figure [[fig:thp-workspace-prompt]].
+#+NAME: fig:thp-workspace-dir
+[[./images/workspace-select-2.png]]
 
 ** Functional Reactive Programming
 

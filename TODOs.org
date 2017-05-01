@@ -1,10 +1,16 @@
-* TODO Citations
-* TODO Figures
+* DONE Citations
+  CLOSED: [2017-05-01 Mon 17:50]
+* DONE Figures
+  CLOSED: [2017-05-01 Mon 20:14]
 * TODO TCD logo
 * TODO Acknowledgements
 * TODO threepenny-gui-flexbox
 * TODO FRP section 
 * TODO Terminology
 * TODO UTP2 justification citation
+* TODO Remove boilerplate in example application.
+* TODO Reference appendices.
 * TODO Send to Andrew for feedback
 * TODO Finish
+* TODO Save referenced webpages
+* TODO Save all code written
