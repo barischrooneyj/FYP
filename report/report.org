@@ -861,21 +861,21 @@ API that opens a browser window.
 
 # Overview of script.
 We wrote the necessary JavaScript script to display a \thp{} application using
-Electron. This script first executes the compiled \thp{} application, which
-starts the \thp{} application's server on a random free port ~PORT~. The script
-waits until the server is running then opens an Electron browser window pointing
-at ~localhost:<PORT>~. Finally the script manages shutdown of the application,
-for example we have to consider the expected behaviour on macOS where clicking
-the red 'x' on an application's window should only close the window but leave
-the process running.
+Electron. The script executes the compiled \thp{} application, starting the
+\thp{} application's server. The script waits until the server is running then
+opens an Electron browser window with the URL pointing at the local server.
+Finally the script manages shutdown of the application, for example we have to
+consider the expected behaviour on macOS where clicking the red 'x' on an
+application's window only closes the window but leave the process running.
 
 # Electron Packager.
 Electron Packager is a tool for packaging applications built with Electron into
 standalone applications. Now that we have our \thp{} application being displayed
 using Electron we can use Electron Packager to create a standalone application
 for the current platform e.g. ~.deb~ packages for Debian or ~.app~ bundles for
-macOS. The standalone application produced includes binaries of Electron and our
-\thp{} application.
+macOS. The application produced is entirely standalone, including all necessary
+dependencies such as the binaries of Electron and our \thp{} application, which
+means it can be easily distributed.
 
 # TERM platform
 
@@ -885,13 +885,14 @@ the necessary script to display a \thp{} application using Electron, a guide on
 how to integrate a \thp{} with Electron using the script, and a link to a
 respository we setup which contains a minimal working example. After addressing
 initial feedback the pull request was accepted. The pull request addresses the
-first two steps of issue #111, it doesn't automate the process but it instructs
-users how to build and package \thp{} applications with Electron.
+first two steps of issue #111, it instructs users how to build and package
+\thp{} applications with Electron but does not automate the process. The guide
+in the pull request is included as an appendix.
 
 #+BEGIN_QUOTE
 Thanks a lot for this!
 
--- Heinrich Apfelmus on Pull Request #169
+-- @HeinrichApfelmus on Pull Request #169
 #+END_QUOTE
 
 *** Directory Selection
@@ -902,14 +903,21 @@ works correctly, however we still need to accomplish directory selection.
 Revisiting [[fig:html-file-selector]] and [[fig:html-directory-selector]] we can see
 that the difference is only a single attribute, namely ~webkitdirectory~.
 
-# Not exposed, need to fork.
-Setting attributes on a HTML element is done in \thp{} by invoking a specific
-function for each attribute. However \thp{} only provides functions for setting
-a handful of attributes, and does not expose the functions for writing our own
-attribute setting functions. We forked the \thp{} repository to expose the
-functions which allow us to write our own attribute setting function. Now using
-this fork we can write a function to set the ~webkitdirectory~ attribute on a
-file selector to turn it into a directory selector.
+# REF http://hackage.haskell.org/package/threepenny-gui-0.8.0.0/docs/Graphics-UI-Threepenny-Attributes.html
+
+# Not set using \thp{}.
+Setting attributes on a HTML element is done in \thp{} by calling a specific
+function that \thp{} exposes for each attribute, for example to set a ~href~
+attribute we could use \thp{}'s ~href~ function. The problem is that \thp{} only
+exposes a handful of these attribute setting functions (ASFs), and in particular
+does not provide an ASF for the ~webkitdirectory~ attribute.
+
+# Need to fork.
+We might consider writing our own ASF for ~webkitdirectory~, however \thp{} does
+not expose the functions used to write ASFs. We forked the \thp{} repository to
+expose these functions used to write ASFs. Now using this fork we can write an
+ASF for the ~webkitdirectory~ attribute, and then set the attribute on a file
+selector to turn it into a directory selector.
 
 # TERM fork
 
