@@ -1,4 +1,5 @@
-# Set documentclass in org. Otherwise if we set it in preamble then org will generate a second documentclass itself, causing a LaTeX compiler error.
+# Set documentclass in org. Otherwise if we set it in preamble then org will
+# generate a second documentclass itself, causing a LaTeX compiler error.
 #+LATEX_CLASS: report
 
 # Include LaTeX preamble.
@@ -361,7 +362,7 @@ below which describes the life-cycle of a \thp{} application.
 #+NAME: fig:thp-life-cycle
 [[./images/threepenny-run-ui.png]]
 
-#+CAPTION: \thp{} served and viewed on the same machine.
+#+CAPTION: \thp{} applications are served by a local server.
 #+NAME: fig:local-server
 [[./images/local-server.png]]
 
@@ -886,19 +887,17 @@ that the difference is only a single attribute, namely ~webkitdirectory~.
 # Not set using \thp{}.
 Setting attributes on a HTML element is done in \thp{} by calling a specific
 function that \thp{} exposes for each attribute, for example to set a ~href~
-attribute we could use \thp{}'s ~href~ function. The problem is that \thp{} only
-exposes a handful of these attribute setting functions (ASFs), and in particular
-does not provide an ASF for the ~webkitdirectory~ attribute.
+attribute we could use \thp{}'s ~href~ function. The problem is that \thp{} does
+not provide such a function for the ~webkitdirectory~ attribute.
 
 # Need to fork.
-We might consider writing our own ASF for ~webkitdirectory~, however \thp{} does
-not expose the functions used to write ASFs. We forked the \thp{} repository to
-expose the functions used to write ASFs. With the fork we can write an ASF for
-the ~webkitdirectory~ attribute, and now set the attribute on a file selector to
-turn it into a directory selector. Figures [[fig:thp-workspace-dir]] shows a
-directory selector in use, note that files are grayed out.
-
-# TERM fork
+We might consider to write a function to set the ~webkitdirectory~ attribute
+ourselves. However \thp{} does not expose the necessary functions to do so, so
+we forked the \thp{} repository and exposed them. The term "fork" refers to a
+copy of a repository. With the edited fork of \thp{} we can now write a function
+for setting the ~webkitdirectory~ attribute on a file selector, turning it into
+a directory selector. Figure [[fig:thp-workspace-dir]] shows a directory selector in
+use, note that files are grayed out.
 
 #+CAPTION: Workspace selection prompt in \utp{}.
 #+NAME: fig:thp-workspace-prompt
@@ -910,17 +909,56 @@ directory selector in use, note that files are grayed out.
 
 ** Functional Reactive Programming
 
-** Abstract GUI Layer
+*** Background
 
-** Integrating with Existing \utp{}
+*** Imperative or Reactive
 
-Difficulty 
+Our \thp{} application will in some places refer to data which will change over
+time, due to user input or for other reasons. For example, on the home screen an
+element displays the current workspace directory, this value is initially unset
+but receives a value once the user has selected a workspace. Updating elements
+to reflect changes in their dependant data can be done in two ways. First, on
+change of the data we can update each element which uses that data, this is the
+imperative style of doing things. Second, we can define any element which uses
+the data to *react* to changes in the data.
+
+#+CAPTION: Element displaying the current workspace.
+#+NAME: list:frp-depends-data
+#+BEGIN_SRC haskell
+text <- UI.div # set UI.text "No workspace set"
+#+END_SRC
+
+#+CAPTION: Handling when a user selects a workspace.
+#+NAME: list:frp-change-data
+#+BEGIN_SRC haskell
+on UI.valuechange selector $ \newWorkspace ->
+  -- User selected a workspace, need to update elements.
+#+END_SRC
+
+In the imperative style, when we write an element that depends on changing data
+e.g. Listing [[list:frp-depends-data]], we also write code to update that element
+wherever the data changes e.g. Listing [[list:frp-change-data]]. The code declaring
+the element and the code handling change of the data may be in separate modules,
+or at least separate to some degree. This separation is a violation of the Law
+of Demeter, cite:hunt2000pragmatic, which says we should minimize coupling
+between modules.
+
+In the reactive style, when we write an element that depends on changing data we
+still write code to update that element whenever the data changes. However, the
+code to update the element is localised around the code where the element is
+written. No longer do we have to worry about all the elements in our codebase
+which depend on said data, or worry about getting the references to these
+elements. We are no longer violating the Law of Demeter.
+
+*** tododile FRP in \utp{}
+
+** tododile Abstract GUI Layer
+
+** tododile Integrating with Existing \utp{}
    
-** Web Development Libraries
+** tododile Leveraging Webdev Libraries
    
-* Reflection
-
-** \thp{}
+* tododile Reflection
 
 Paragraph on slow development loop where we compile, view changes, edit,
 re-compile... In contrast with modern web development where we can have
@@ -929,31 +967,26 @@ hot-reloading of changed modules.
 Paragraph on \thp{} being maintainable due to small code base, and solving
 problems of traditional GUI libraries. Strong future.
 
-** Conclusion
-
 Paragraph on goal accomplishment.
 
+\appendix
+
 * Appendices
-
-** Terminology
-
-** threepenny-gui-contextmenu
-
-Include README.
-
+** tododile threepenny-gui-contextmenu
 ** threepenny-gui-flexbox
 
 Here follows the README of the Haskell package \tgf{}, compiled from GitHub
 markdown to LaTeX using ~pandoc~.
 
+tododile Gorgeous line separator.
+
 #+INCLUDE: "./threepenny-gui-flexbox.org" :minlevel 3
 
-** Better Events
-
 ** Pull Requests and Issues
+
+tododile Link and sentence on each.
 
 * Final LaTeX                                                        :ignore:
 
 bibliography:~/bibliography/references.bib
 
-\appendix

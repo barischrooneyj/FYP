@@ -9,7 +9,6 @@
 * DONE threepenny-gui-flexbox
   CLOSED: [2017-05-01 Mon 20:58]
 * TODO Start FRP section, cite Pragmatic Programmer
-* TODO Terminology
 * TODO UTP2 justification citation
 * DONE Remove boilerplate in example application.
   CLOSED: [2017-05-01 Mon 20:25]
