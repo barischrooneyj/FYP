@@ -144,7 +144,7 @@ guarantees of avoiding conflicts with wxHaskell's dependencies. At the beginning
 of this final year project \utp{} was not building with Stack at all but rather
 had to built by directly invoking the GHC compiler. Andrew Butterfield later
 succeeded in getting the project building with Stack, the significance of which
-is reflected in the commit message:
+is reflected in the respective commit message:
 
 # TERM commit message
 
@@ -167,15 +167,14 @@ application XCode which on my machine weighs in at 10.46GB.
 
 *** Difficult to Package
 
-A goal of Andrew Butterfield's while developing \utp{} was to reach a point
-where standalone applications of \utp{} could be distributed
-e.g. ~.deb~ packages for Debian or ~.app~ bundles for macOS, or if not native
-applications then at least executables. This proved difficult for the existing
-project as it was not being successfully built on macOS and was difficult to
-build on Linux, however executables for Windows do exist and are hosted on the
-project's homepage. At least on macOS the difficulties in building the project
-are largely related to wxHaskell, for reasons discussed in the previous section
-2.2.
+A goal of Andrew Butterfield's (TODO cite) while developing \utp{} was to reach
+a point where standalone applications of \utp{} could be distributed e.g. ~.deb~
+packages for Debian or ~.app~ bundles for macOS, or if not native applications
+then at least executables. This proved difficult for the existing project as it
+was not being successfully built on macOS and was difficult to build on Linux,
+however executables for Windows do exist and are hosted on the project's
+homepage. At least on macOS the difficulties in building the project are largely
+related to wxHaskell, for reasons discussed in the previous section 2.2.
 
 #+BEGIN_QUOTE
 Students at TCD have successfully built it on Linux (Ubuntu). It should run in
@@ -881,8 +880,9 @@ Thanks a lot for this!
 # A single attribute.
 Now that our \thp{} application can be displayed using Electron, file selection
 works correctly, however we still need to accomplish directory selection.
-Revisiting [[list:html-file-selector]] and [[list:html-directory-selector]] we can see
-that the difference is only a single attribute, namely ~webkitdirectory~.
+Revisiting Figure [[list:html-file-selector]] and [[list:html-directory-selector]] we
+can see that the difference is only a single attribute, namely
+~webkitdirectory~.
 
 # Not set using \thp{}.
 Setting attributes on a HTML element is done in \thp{} by calling a specific
@@ -964,9 +964,10 @@ the data directly. Instead we update the elements indirectly, by emitting a new
 value of the data which the elements then receive. By not updating the elements
 directly we are not violating the Law of Demeter.
 
-#+CAPTION: FRP allows us not worry about updating element state directly.
+#+CAPTION: With FRP we don't have to worry about updating element state.
 #+NAME: fig:indirect-frp
-[[./images/indirect-frp.png]]
+#+ATTR_LATEX: :width 3.0in
+[[./images/indirect-frp-1.png]]
 
 *** FRP in \utp{}
 
@@ -993,7 +994,15 @@ update themselves. This paragraph relates closely to Figure [[fig:indirect-frp]]
 
 ** Abstract GUI Layer
 
+# Abstract GUI layer.
+The first attempt at building a GUI for \utp{} using thp{} involved the notion
+of an abstract GUI layer (AGL). We wanted to write the GUI for \utp{} in a
+manner abstracted away from the specifics on any one GUI library. We hoped to
+have the GUI only written once, GUI library agnostic, then we could plug in
+either of the GUI libraries, wxHaskell or \thp{}, to power the AGL.
+
 # 
+ 
 ** Integrating with Existing \utp{}
    
 * Reflection
@@ -1011,13 +1020,21 @@ Paragraph on goal accomplishment.
 \appendix
 
 * Appendices
-** tododile threepenny-gui-contextmenu
+
+** TODO threepenny-gui-contextmenu
+   
+\ornamentbreak
+
+** TODO pull request 169 guide
+
+\ornamentbreak
+
 ** threepenny-gui-flexbox
 
 Here follows the README of the Haskell package \tgf{}, compiled from GitHub
 markdown to LaTeX using ~pandoc~.
 
-tododile Gorgeous line separator.
+\ornamentbreak
 
 #+INCLUDE: "./threepenny-gui-flexbox.org" :minlevel 3
 

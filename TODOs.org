@@ -10,14 +10,15 @@
   CLOSED: [2017-05-01 Mon 20:58]
 * DONE Start FRP section, cite Pragmatic Programmer
   CLOSED: [2017-05-02 Tue 18:47]
-* TODO UTP2 justification citation
-* TODO FRP chapter
+* DONE FRP chapter
+  CLOSED: [2017-05-02 Tue 23:41]
 * TODO Abstract GUI Layer
 * TODO Integrating with existing code.
 * DONE Remove boilerplate in example application.
   CLOSED: [2017-05-01 Mon 20:25]
-* TODO Send to Andrew for feedback
+* TODO Send to Andrew for feedback + UTP2 justification citation
 * DONE Proper Appendices
   CLOSED: [2017-05-02 Tue 18:48]
+* TODO Remove appendix line numbers
 * TODO Save referenced webpages
 * TODO Save all code written
