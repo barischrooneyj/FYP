@@ -8,12 +8,16 @@
   CLOSED: [2017-05-01 Mon 20:32]
 * DONE threepenny-gui-flexbox
   CLOSED: [2017-05-01 Mon 20:58]
-* TODO Start FRP section, cite Pragmatic Programmer
+* DONE Start FRP section, cite Pragmatic Programmer
+  CLOSED: [2017-05-02 Tue 18:47]
 * TODO UTP2 justification citation
+* TODO FRP chapter
+* TODO Abstract GUI Layer
+* TODO Integrating with existing code.
 * DONE Remove boilerplate in example application.
   CLOSED: [2017-05-01 Mon 20:25]
 * TODO Send to Andrew for feedback
-* TODO Finish
-* TODO Proper Appendices
+* DONE Proper Appendices
+  CLOSED: [2017-05-02 Tue 18:48]
 * TODO Save referenced webpages
 * TODO Save all code written

@@ -310,11 +310,11 @@ an in-depth walk-through of a small \thp{} application.
 \thp{} uses the web browser as a display. This means that a user views a \thp{}
 application in their browser, and what is rendered in their browser is HTML and
 CSS, which can be manipulated by JavaScript. To solidify the idea that a \thp{}
-application is ultimately HTML and CSS, Figure [[fig:threepenny-is-html]] shows a
-simple \thp{} application being displayed in a browser. The browser's developer
-tools are open, showing the HTML structure of the application.
+application is ultimately HTML, Figure [[fig:threepenny-is-html]] shows a simple
+\thp{} application being displayed in a browser. The browser's developer tools
+are open, showing the HTML structure of the application.
 
-#+CAPTION: HTML structure of a \thp{} application.
+#+CAPTION: A \thp{} application is ultimately HTML.
 #+NAME: fig:threepenny-is-html
 [[./images/threepenny-is-html.png]]
 
@@ -888,16 +888,16 @@ that the difference is only a single attribute, namely ~webkitdirectory~.
 Setting attributes on a HTML element is done in \thp{} by calling a specific
 function that \thp{} exposes for each attribute, for example to set a ~href~
 attribute we could use \thp{}'s ~href~ function. The problem is that \thp{} does
-not provide such a function for the ~webkitdirectory~ attribute.
+not provide such a function W for the ~webkitdirectory~ attribute, nor does
+\thp{} expose the functions that allow us write to write W ourselves.
 
-# Need to fork.
-We might consider to write a function to set the ~webkitdirectory~ attribute
-ourselves. However \thp{} does not expose the necessary functions to do so, so
-we forked the \thp{} repository and exposed them. The term "fork" refers to a
-copy of a repository. With the edited fork of \thp{} we can now write a function
-for setting the ~webkitdirectory~ attribute on a file selector, turning it into
-a directory selector. Figure [[fig:thp-workspace-dir]] shows a directory selector in
-use, note that files are grayed out.
+# Fork and success.
+We had to fork the \thp{} repository and expose the necessary functions that
+allow us to write W. The term "fork" means a copy of a repository. With the fork
+of \thp{} we can now write the function W to set ~webkitdirectory~ on a file
+selector, turning it into a directory selector. Figure [[fig:thp-workspace-dir]]
+shows a directory selector in use in our \thp{} implementation of \utp{}, note
+that files are grayed out.
 
 #+CAPTION: Workspace selection prompt in \utp{}.
 #+NAME: fig:thp-workspace-prompt
@@ -909,18 +909,14 @@ use, note that files are grayed out.
 
 ** Functional Reactive Programming
 
-*** Background
-
 *** Imperative or Reactive
 
 Our \thp{} application will in some places refer to data which will change over
 time, due to user input or for other reasons. For example, on the home screen an
 element displays the current workspace directory, this value is initially unset
 but receives a value once the user has selected a workspace. Updating elements
-to reflect changes in their dependant data can be done in two ways. First, on
-change of the data we can update each element which uses that data, this is the
-imperative style of doing things. Second, we can define any element which uses
-the data to *react* to changes in the data.
+to reflect changes in their dependant data can be done in an imperative style or
+reactive style.
 
 #+CAPTION: Element displaying the current workspace.
 #+NAME: list:frp-depends-data
@@ -935,37 +931,80 @@ on UI.valuechange selector $ \newWorkspace ->
   -- User selected a workspace, need to update elements.
 #+END_SRC
 
+# Imperative style.
 In the imperative style, when we write an element that depends on changing data
 e.g. Listing [[list:frp-depends-data]], we also write code to update that element
 wherever the data changes e.g. Listing [[list:frp-change-data]]. The code declaring
-the element and the code handling change of the data may be in separate modules,
-or at least separate to some degree. This separation is a violation of the Law
-of Demeter, cite:hunt2000pragmatic, which says we should minimize coupling
-between modules.
+the element and the code handling a change in the data may be in separate
+modules, or at least separate to some degree. This separation is a violation of
+the Law of Demeter, cite:hunt2000pragmatic, which says we should minimize
+coupling between modules.
 
+# Reactive style.
 In the reactive style, when we write an element that depends on changing data we
-still write code to update that element whenever the data changes. However, the
-code to update the element is localised around the code where the element is
-written. No longer do we have to worry about all the elements in our codebase
-which depend on said data, or worry about getting the references to these
-elements. We are no longer violating the Law of Demeter.
+simply declare that it should have the /current/ value of the data, this data is
+held in some variable D. Now the code handling a change in the data, namely
+Listing [[list:frp-change-data]] simply updates D, any elements which depend on D
+will be updated automatically, see Figure [[fig:indirect-frp]]. Notably the code
+handling a change to the data does not have to be concerned with elements
+depending on the data, we are no longer violating the Law of Demeter.
 
-*** tododile FRP in \utp{}
+#+BEGIN_QUOTE
+A remote part of the program may change the [element], and this "action at a
+distance" is not visible at the point where the counter is declared. In
+contrast, FRP specifies the whole dynamic behavior at the time of declaration
 
-** tododile Abstract GUI Layer
+-- cite:Threepenny-guiDesignWidgets
+#+END_QUOTE
 
-** tododile Integrating with Existing \utp{}
+# Summary.
+To summarise, functional reactive programming is preferable because when some
+data changes we don't have to worry about updating the elements that depend on
+the data directly. Instead we update the elements indirectly, by emitting a new
+value of the data which the elements then receive. By not updating the elements
+directly we are not violating the Law of Demeter.
+
+#+CAPTION: FRP allows us not worry about updating element state directly.
+#+NAME: fig:indirect-frp
+[[./images/indirect-frp.png]]
+
+*** FRP in \utp{}
+
+# Where it is used.
+Functional reactive programming is used in our \thp{} implementation of \utp{}
+in two places. We use FRP to manage the current workspace directory and the
+theory graph. In Figure [[fig:thp-utp-home]], a single-node theory graph can be seen
+in our \thp{} implementation of \utp{}, the single node is labeled "\_ROOT$0".
+The screenshot also shows the current workspace being displayed.
+
+# Implementation.
+In each of these cases we have a variable, accessible application-wide, which
+represents the data over time. In the workspace directory's case the data is a
+string, in the theory graph's case it is a tree structure. Whenever a new value
+of the data is computed somewhere in the application, usually due to user input,
+we emit that new value. For example when a user selects a workspace, we emit a
+string, the file path of the workspace directory. If the data's value has
+changed, any elements depending on the data will receive the new value and
+update themselves. This paragraph relates closely to Figure [[fig:indirect-frp]].
+
+#+CAPTION: Homescreen of \thp{} implementation of \utp{}.
+#+NAME: fig:thp-utp-home
+[[./images/workspace-select-3.png]]
+
+** Abstract GUI Layer
+
+# 
+** Integrating with Existing \utp{}
    
-** tododile Leveraging Webdev Libraries
-   
-* tododile Reflection
+* Reflection
 
 Paragraph on slow development loop where we compile, view changes, edit,
 re-compile... In contrast with modern web development where we can have
 hot-reloading of changed modules.
 
 Paragraph on \thp{} being maintainable due to small code base, and solving
-problems of traditional GUI libraries. Strong future.
+problems of traditional GUI libraries. Strong future. Mention leveraging webdev
+libraries.
 
 Paragraph on goal accomplishment.
 
@@ -986,7 +1025,6 @@ tododile Gorgeous line separator.
 
 tododile Link and sentence on each.
 
-* Final LaTeX                                                        :ignore:
+* Ignored LaTeX                                                      :ignore:
 
 bibliography:~/bibliography/references.bib
-

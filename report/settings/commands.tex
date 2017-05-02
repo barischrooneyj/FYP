@@ -16,3 +16,18 @@
 \newcommand \signed[1]{
   \signedanddate{}{}
 }
+
+%% Fancy line separator.
+\usepackage{psvectorian}
+
+\newcommand{\ornamentleft}{%
+    \psvectorian[width=2em]{2}%
+}
+\newcommand{\ornamentright}{%
+    \psvectorian[width=2em,mirror]{2}%
+}
+\newcommand{\ornamentbreak}{%
+    \begin{center}
+    \ornamentleft\quad\ornamentright
+    \end{center}%
+}
