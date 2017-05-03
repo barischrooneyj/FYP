@@ -892,12 +892,12 @@ not provide such a function W for the ~webkitdirectory~ attribute, nor does
 \thp{} expose the functions that allow us write to write W ourselves.
 
 # Fork and success.
-We had to fork the \thp{} repository and expose the necessary functions that
-allow us to write W. The term "fork" means a copy of a repository. With the fork
-of \thp{} we can now write the function W to set ~webkitdirectory~ on a file
-selector, turning it into a directory selector. Figure [[fig:thp-workspace-dir]]
-shows a directory selector in use in our \thp{} implementation of \utp{}, note
-that files are grayed out.
+We had to fork the \thp{} repository and expose the functions that allow us to
+write W. A "fork" is a copy of a repository. With the fork of \thp{} we can
+write the function W to set ~webkitdirectory~ on a file selector, turning it
+into a directory selector. Figure [[fig:thp-workspace-dir]] shows a directory
+selector in use in our \thp{} implementation of \utp{}, notice that files are
+grayed out.
 
 #+CAPTION: Workspace selection prompt in \utp{}.
 #+NAME: fig:thp-workspace-prompt
@@ -992,19 +992,46 @@ update themselves. This paragraph relates closely to Figure [[fig:indirect-frp]]
 #+NAME: fig:thp-utp-home
 [[./images/workspace-select-3.png]]
 
-** Abstract GUI Layer
+
+** Implementing \utp{} with \thp{}
+
+*** Abstract GUI Layer
 
 # Abstract GUI layer.
-The first attempt at building a GUI for \utp{} using thp{} involved the notion
+The first attempt at building a GUI for \utp{} with \thp{} involved the notion
 of an abstract GUI layer (AGL). We wanted to write the GUI for \utp{} in a
 manner abstracted away from the specifics on any one GUI library. We hoped to
-have the GUI only written once, GUI library agnostic, then we could plug in
+have the GUI only written once, GUI library agnostic, then we would plug-in
 either of the GUI libraries, wxHaskell or \thp{}, to power the AGL.
 
-# 
+# Implementation.
+To implement this abstract GUI layer we wrote a set of generic functions for
+things like creating a button or alerting a user. Our \utp{} application would
+be written using these generic functions instead of functions from a specific
+GUI library, allowing us to only write the GUI once.
+
+# Typeclass.
+The set of generic GUI functions were written as an interface, meaning the
+functions did not have an implementation, only their type signatures are
+declared. This interface could be implemented for each GUI library we want our
+\utp{} application to support. Our \utp{} application could be written using the
+generic functions of the interface, which GUI library implementation is actually
+used would depend solely on which implementation we pass in as an argument to
+our application.
+
+# Difficulty: architecture differences.
+Writing such an AGL proved difficult because of the different architectures of
+wxHaskell and \thp{}. In particular we can wait for user input in wxHaskell,
+while in \thp{} we cannot, in \thp{} we have to provide a callback that is
+executed once the user provides input. This isn't really \thp{}'s fault, it is
+because some \thp{} code is compiled to JavaScript which runs in the browser's
+event-loop, cite:swenson2013javascript. Because of the different architectures
+of wxHaskell and \thp{}, it is difficult to capture some functionality with a
+generic function.
  
-** Integrating with Existing \utp{}
+*** Integrating with Existing \utp{}
    
+
 * Reflection
 
 Paragraph on slow development loop where we compile, view changes, edit,
@@ -1017,31 +1044,40 @@ libraries.
 
 Paragraph on goal accomplishment.
 
+* LaTeX                                                              :ignore:
+
 \appendix
 
 * Appendices
+
+** Pull Requests and Issues
+
+*** Pull Requests
+
+The following pull requests were accepted into the \thp{} repository.
+
+** Electron Integration Guide for \thp{} 
+
+The Electron integration guide for \thp{}, in pull request #169. Compiled from
+GitHub markdown to LaTeX using ~pandoc~.
+
+\ornamentbreak
+
+#+INCLUDE: "./pr169.org" :minlevel 3
 
 ** TODO threepenny-gui-contextmenu
    
 \ornamentbreak
 
-** TODO pull request 169 guide
-
-\ornamentbreak
-
 ** threepenny-gui-flexbox
 
-Here follows the README of the Haskell package \tgf{}, compiled from GitHub
-markdown to LaTeX using ~pandoc~.
+README of the Haskell package \tgf{}. Compiled from GitHub markdown to LaTeX
+using ~pandoc~.
 
 \ornamentbreak
 
 #+INCLUDE: "./threepenny-gui-flexbox.org" :minlevel 3
 
-** Pull Requests and Issues
-
-tododile Link and sentence on each.
-
-* Ignored LaTeX                                                      :ignore:
+* LaTeX                                                              :ignore:
 
 bibliography:~/bibliography/references.bib

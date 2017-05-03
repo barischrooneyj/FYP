@@ -1,0 +1,143 @@
+% Created 2017-05-03 Wed 02:14
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{minted}
+\author{Jeremy}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Jeremy},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 25.1.1 (Org mode 9.0.6)}, 
+ pdflang={English}}
+\begin{document}
+
+\tableofcontents
+
+\section{Electron}
+\label{sec:orgb9e4dda}
+
+How to run and package Threepenny apps with \href{https://electron.atom.io}{Electron} and \href{https://github.com/electron-userland/electron-packager\#electron-packager}{Electron Packager}.
+
+For reference, a minimal working example is available \href{https://github.com/barischj/threepenny-gui-electron-example}{here}.
+
+\subsection{Justification}
+\label{sec:org7377b81}
+
+Normally when running a Threepenny app we execute our Haskell, with \texttt{stack exec}
+or otherwise, which starts a local server and we open our browser on a certain
+port to view our app. However this has a few subtle drawbacks.
+
+One drawback is that most browsers are designed with remote servers in mind and
+have security features which don't make much sense for local server
+architectures like Threepenny's. Take file selection for example. When a user
+selects a file in a browser, the browser only exposes the file name and contents
+to the server, not allowing the server to receive the full file path. However
+for local server architectures there isn't much point in sending the entire file
+contents to the server since the server is on the same file system and could
+read the file directly, if only it had the full file path. Electron displays our
+app in a Chromium instance with many of these security features removed.
+
+Another drawback is that the user has to run the app from the command line.
+Using electron-packager we can package native apps for Linux, macOS and Windows.
+
+\subsection{Running with Electron}
+\label{sec:org562eb1f}
+To run a Threepenny app with Electron we need an Electron \href{https://electron.atom.io/docs/tutorial/quick-start/\#main-process}{main process}. We
+provide this one: \href{./electron/electron.js}{electron.js}. It runs the following on startup: - selects a
+free port to run on - executes our Threepenny app binary, passing the port to
+run on as an argument - waits for Threepenny's server to start accepting
+connections
+\begin{itemize}
+\item opens an Electron window which loads the URL of our Threepenny app
+\end{itemize}
+
+To get started with the linked \texttt{electron.js} first add this \href{'./electron/package.json'}{package.json} to your
+project root directory. You'll need Node installed and \texttt{npm} on your PATH,
+confirm by running \texttt{which npm}. Now run \texttt{npm install} from the project root
+directory to install the necessary dependencies.
+
+The linked \texttt{electron.js} executes the Threepenny app binary, passing the port to
+run on as an argument. This of course means your Threepenny app needs to take
+the port as an argument. We suggest also setting stdout to be line buffered, at
+least while developing. Altogether it should look something like this:
+
+\begin{minted}[]{haskell}
+module Main where
+
+import System.Environment (getArgs)
+import System.IO
+import YourApp            (start)
+
+main :: IO ()
+main = do
+    hSetBuffering stdout LineBuffering
+    [port, otherArg1, otherArg2] <- getArgs
+    start (read port)
+\end{minted}
+
+Now copy the linked \texttt{electron.js} to your project root directory. You'll have to
+edit the defined constants: \texttt{relBin}, which is the relative path from
+\texttt{electron.js} to your Threepenny application binary; and \texttt{binArgs}, which
+contains any additional arguments to pass to the binary. If you're not sure
+about the relative path to your application binary, and you're using Stack, see
+the \hyperref[sec:orgcc92acc]{next section}.
+
+Now run your app with Electron: \texttt{./node\_modules/.bin/electron electron.js}
+
+\subsubsection{Explicit binary location}
+\label{sec:orgcc92acc}
+\texttt{relBin} is the relative path from \texttt{electron.js} to your Threepenny
+application binary. This might change depending on which tool or
+platform you are building with and thus can be a pain to set manually.
+If you are using Stack you can easily build your application binary to
+an explicit location, possibly a \texttt{build} directory:
+
+\texttt{stack install -{}-local-bin-path build}
+
+Now you can simply set \texttt{relBin} to \texttt{./build/your-app-exe}.
+
+\subsection{Packaging with electron-packager}
+\label{sec:orgfacb752}
+
+This section assumes the app is already setup to run with Electron based on the
+\hyperref[sec:org562eb1f]{above} instructions.
+
+First install electron-packager: \texttt{npm install electron-packager}
+
+Optionally edit the "name" field in \texttt{package.json} to set the name of the
+packaged app. Then to package the app for the current platform, simply:
+
+\begin{verbatim}
+./node_modules/.bin/electron-packager .
+\end{verbatim}
+
+This is the most basic way to package the app, it will copy the current
+directory to the packaged app. However you'll likely want to avoid copying some
+source files, which can be achieved with the \texttt{-{}-ignore} flag. You might end up
+using:
+
+\begin{verbatim}
+./node_modules/.bin/electron-packager . --ignore=app --ignore=src
+\end{verbatim}
+
+If you are using Stack and building your application binary to an explicit
+location, as explained \hyperref[sec:orgcc92acc]{above} then you might want to also ignore \texttt{.stack-work/}.
+An icon can be set by passing the icon path to \texttt{-{}-icon}, note that the icon
+format \href{https://github.com/electron-userland/electron-packager/blob/master/docs/api.md\#icon}{depends on the platform}. For more options use the \texttt{-{}-help} flag.
+\end{document}

@@ -1,1 +1,4 @@
+*.bbl
+*.md
+_minted-*/
 report.tex
