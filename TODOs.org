@@ -20,13 +20,13 @@
   CLOSED: [2017-05-03 Wed 02:38]
 * DONE Remove boilerplate in example application.
   CLOSED: [2017-05-01 Mon 20:25]
-* TODO Send to Andrew for feedback + UTP2 justification citation
+* DONE Send to Andrew for feedback + UTP2 justification citation
+  CLOSED: [2017-05-03 Wed 18:43]
 * TODO Integrating with existing code section
 * DONE Proper Appendices
   CLOSED: [2017-05-02 Tue 18:48]
 * TODO Reflection section
-* TODO Laws display, capture keyboard input, add theory
-* TODO Remove appendix line numbers
 * TODO threepenny-gui-contextmenu README
+* TODO Laws display, capture keyboard input, add theory
 * TODO Save referenced webpages
 * TODO Save all code written

@@ -88,8 +88,6 @@ features that appeal to us. We might choose a functional language like Haskell
 because features of the language such as lazy evaluation and higher-order
 functions allow us to write highly modular programs, programs that are much
 smaller and easier to write than conventional ones, cite:hughes1989functional.
-It is a compromise to be exposed to features from a language that we did not
-choose.
 
 While we can argue the merits of functional programming it is worth noting that
 Haskell and C++ are two solutions to different problems, they each solve their
@@ -1009,16 +1007,16 @@ either of the GUI libraries, wxHaskell or \thp{}, to power the AGL.
 To implement this abstract GUI layer we wrote a set of generic functions for
 things like creating a button or alerting a user. Our \utp{} application would
 be written using these generic functions instead of functions from a specific
-GUI library, allowing us to only write the GUI once.
+GUI library; again, allowing us to only write the GUI once.
 
 # Typeclass.
-The set of generic GUI functions were written as an interface, meaning the
-functions did not have an implementation, only their type signatures are
-declared. This interface could be implemented for each GUI library we want our
-\utp{} application to support. Our \utp{} application could be written using the
-generic functions of the interface, which GUI library implementation is actually
-used would depend solely on which implementation we pass in as an argument to
-our application.
+The set of generic GUI functions were first written as an interface, so the
+functions did not have an implementation, only their type signatures were
+declared. This interface could then be implemented for each GUI library we want
+the \utp{} application to support. The \utp{} application would be written using
+the generic functions of the interface, which GUI library implementation would
+actually be used would depend solely on which implementation we pass in as an
+argument to our application.
 
 # Difficulty: architecture differences.
 Writing such an AGL proved difficult because of the different architectures of
@@ -1030,10 +1028,57 @@ event-loop, cite:swenson2013javascript. Because of the different architectures
 of wxHaskell and \thp{}, it is difficult to capture some functionality with a
 generic function.
  
-*** Integrating with Existing \utp{}
+*** Integration with Existing \utp{}
+    :LOGBOOK:
+    CLOCK: [2017-05-03 Wed 19:41]--[2017-05-03 Wed 20:06] =>  0:25
+    :END:
    
+# Need for existing functions.
+Since writing an abstract GUI layer proved difficult we attempted instead to
+write a new GUI for \utp{} directly with \thp{}. In doing so we would like to
+call some of the same functions that are called in the existing \utp{}
+application, instead of writing them again. For example the existing \utp{}
+application runs, on startup, a function called ~startupFileHandling~ is called
+which ensures the workspace directory is correctly setup.
 
-* Reflection
+# Tightly coupled wxHaskell example.
+The difficulty in reusing a function like ~startupFileHandling~ is the tight
+integration of wxHaskell code. For example, ~startupFileHandling~ first checks
+if a workspace is already setup, if not it asks the user which directory to use.
+This user interaction takes the form of a wxHaskell input dialog. The tight
+integration of wxHaskell code is problematic because our \thp{} application
+cannot run wxHaskell code.
+
+# Let's see how deep the rabbit hole goes?
+~startupFileHandling~ delegates some work to other \utp{} functions which again
+call other \utp{} functions, and so on such that we have a tree of \utp{}
+functions called by ~startupFileHandling~. In this tree of functions, some of
+the functions call wxHaskell code, which is not compatible with our \thp{}
+application, this tree is shown in Figure [[fig:startup-tree]]. Another example of
+wxHaskell code called, apart from the user input mentioned above, is when an
+error occurs a wxHaskell error dialog is displayed.
+
+#+CAPTION: Tree of functions with tight integration of wxHaskell code.
+#+NAME: fig:startup-tree
+[[./images/startupFileHandling.png]]
+
+# Solution.
+Because of the tight integration of wxHaskell code it requires some work to use
+a function like ~startupFileHandling~ in our \thp{} application. To use
+~startupFileHandling~ we need to rewrite the entire tree of functions below
+~startupFileHandling~, replacing each call to a wxHaskell function, with a call
+to a function that we provide as an argument to ~startupFileHandling~. This is
+depicted in Figure [[fig:startup-GI]] and should be contrasted with Figure
+[[fig:startup-tree]]. With this rewrite, ~startupFileHandling~ is now GUI library
+independent, to use ~startupFileHandling~ in our \thp{} application we pass in
+\thp{} functions as arguments, to use it in the existing \utp{} application we
+pass in wxHaskell functions.
+
+#+CAPTION: Making Figure [[fig:startup-tree]] GUI library independent.
+#+NAME: fig:startup-GI
+[[./images/startup-GI.png]]
+
+* TODO Conclusion
 
 Paragraph on slow development loop where we compile, view changes, edit,
 re-compile... In contrast with modern web development where we can have
@@ -1069,12 +1114,12 @@ The following pull requests were accepted into the \thp{} repository.
 
 The following issues were opened on the \thp{} repository.
 
-| Number | Description                                                                    |
-|--------+--------------------------------------------------------------------------------|
-|    146 | Guide for writing "widgets" in \thp{} is unfinished.                           |
-|    167 | Suggested a new design for event data returned from the browser to the server. |
-|    170 | Functions to write our own attribute setting functions are not exposed.        |
-|    171 | "valuChange" event is not fired until user presses ESC.                        |
+| Number | Description                                                                     |
+|--------+---------------------------------------------------------------------------------|
+|    146 | Guide for writing "widgets" in \thp{} is unfinished.                            |
+|    167 | Suggested a new design for returning event data from the browser to the server. |
+|    170 | Functions for writing our own attribute setting functions are not exposed.      |
+|    171 | "valueChange" event is not fired until user presses ESC.                        |
 
 ** Electron Integration Guide for \thp{} 
 
