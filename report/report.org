@@ -979,14 +979,15 @@ in our \thp{} implementation of \utp{}, the single node is labeled "\_ROOT$0".
 The screenshot also shows the current workspace being displayed.
 
 # Implementation.
-In each of these cases we have a variable, accessible application-wide, which
+This paragraph relates closely to Figure [[fig:indirect-frp]]. In each of these
+cases where we use FRP we have a variable, accessible application-wide, which
 represents the data over time. In the workspace directory's case the data is a
 string, in the theory graph's case it is a tree structure. Whenever a new value
 of the data is computed somewhere in the application, usually due to user input,
 we emit that new value. For example when a user selects a workspace, we emit a
 string, the file path of the workspace directory. If the data's value has
 changed, any elements depending on the data will receive the new value and
-update themselves. This paragraph relates closely to Figure [[fig:indirect-frp]].
+update themselves.
 
 #+CAPTION: Homescreen of \thp{} implementation of \utp{}.
 #+NAME: fig:thp-utp-home
@@ -1055,6 +1056,25 @@ Paragraph on goal accomplishment.
 *** Pull Requests
 
 The following pull requests were accepted into the \thp{} repository.
+
+| Number | Description                                                               |
+|--------+---------------------------------------------------------------------------|
+|    147 | Support for a contextmenu event, allowing us to build a right-click menu. |
+|    162 | Bump Stack resolver to next major version.                                |
+|    168 | Use high-quality badge for Travis build status.                           |
+|    169 | Added Electron integration guide for \thp{}.                              |
+|    173 | Added MonadUI typeclass.                                                  |
+
+*** Issues
+
+The following issues were opened on the \thp{} repository.
+
+| Number | Description                                                                    |
+|--------+--------------------------------------------------------------------------------|
+|    146 | Guide for writing "widgets" in \thp{} is unfinished.                           |
+|    167 | Suggested a new design for event data returned from the browser to the server. |
+|    170 | Functions to write our own attribute setting functions are not exposed.        |
+|    171 | "valuChange" event is not fired until user presses ESC.                        |
 
 ** Electron Integration Guide for \thp{} 
 

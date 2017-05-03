@@ -16,7 +16,8 @@
   CLOSED: [2017-05-03 Wed 02:00]
 * DONE Pull request 169 README
   CLOSED: [2017-05-03 Wed 02:22]
-* TODO List issues and pull requests
+* DONE List issues and pull requests
+  CLOSED: [2017-05-03 Wed 02:38]
 * DONE Remove boilerplate in example application.
   CLOSED: [2017-05-01 Mon 20:25]
 * TODO Send to Andrew for feedback + UTP2 justification citation

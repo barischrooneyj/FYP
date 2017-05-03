@@ -29,10 +29,10 @@ Using electron-packager we can package native apps for Linux, macOS and Windows.
     :END:
 
 To run a Threepenny app with Electron we need an Electron [[https://electron.atom.io/docs/tutorial/quick-start/#main-process][main process]]. We
-provide this one: [[./electron/electron.js][electron.js]]. It runs the following on startup: - selects a
-free port to run on - executes our Threepenny app binary, passing the port to
-run on as an argument - waits for Threepenny's server to start accepting
-connections
+provide this one: [[./electron/electron.js][electron.js]]. It runs the following on startup:
+- selects a free port to run on
+- executes our Threepenny app binary, passing the port to run on as an argument
+- waits for Threepenny's server to start accepting connections
 - opens an Electron window which loads the URL of our Threepenny app
 
 To get started with the linked =electron.js= first add this [[file:'./electron/package.json'][package.json]] to your
