@@ -1,11 +1,8 @@
 All code is online on GitHub. Some repositories do not contain only our code, to
 distinguish the code it is necessary to view commit history, alternatively you
 could use a blame tool. For convenience these repositories are also available
-locally in the folder with the respository's name, just unzip code.zip first and
-cd into the code directory:
-
-unzip code.zip
-cd code
+locally in the folder with the respository's name, just run "unzip code.zip"
+first:
 
 The Threepenny-gui implementation of U·(TP)2 produced can be found on GitHub at:
 
