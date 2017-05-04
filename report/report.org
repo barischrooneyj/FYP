@@ -5,6 +5,9 @@
 # Include LaTeX preamble.
 #+LATEX_HEADER: \include{settings/preamble}
 
+# 12pt font.
+#+LaTeX_CLASS_OPTIONS: [12pt]
+
 # We generate our own table of contents, so suppress the default one.
 #+OPTIONS: toc:nil
 
@@ -147,7 +150,7 @@ is reflected in the respective commit message:
 # TERM commit message
 
 #+BEGIN_QUOTE
-UTP2 NOW BUILDS WITH stack ON OS X 10.11.16 !!!! 
+"UTP2 NOW BUILDS WITH stack ON OS X 10.11.16 !!!!" 
 #+END_QUOTE
 
 It is worth noting two things here. One is that the difficulty of getting \utp{}
@@ -165,22 +168,18 @@ application XCode which on my machine weighs in at 10.46GB.
 
 *** Difficult to Package
 
-A goal of Andrew Butterfield's (TODO cite) while developing \utp{} was to reach
-a point where standalone applications of \utp{} could be distributed e.g. ~.deb~
-packages for Debian or ~.app~ bundles for macOS, or if not standalone
-applications then at least executables. This proved difficult for the existing
-project as it was not being successfully built on macOS and was difficult to
-build on Linux, however executables for Windows do exist and are hosted on the
-project's homepage. At least on macOS the difficulties in building the project
-are largely related to wxHaskell, for reasons discussed in the previous section
-2.2.
+To distribute \utp{} it would be beneficial to be able to produce a standalone
+application e.g. a ~.deb~ package for Debian or ~.app~ bundles for macOS, or if
+not standalone applications then at least executables. On macOS there were
+difficulties in building the project, largely related to wxHaskell for reasons
+discussed in the previous section 2.2.
 
 #+BEGIN_QUOTE
-Students at TCD have successfully built it on Linux (Ubuntu). It should run in
+"Students at TCD have successfully built it on Linux (Ubuntu). It should run in
 principle on Max OS X as well, but I have not been able to get this to work
-(help would be appreciated).
+(help would be appreciated)."
 
--- scss.tcd.ie/Andrew.Butterfield/Saoithin
+-- cite:SaoithinHomepagea (Note that this webpage is somewhat outdated).
 #+END_QUOTE
 
 *** Conclusion
@@ -206,10 +205,10 @@ second category, high-level libraries, tend to not provide GUI support directly
 but rely on a library like wxHaskell to provide the necessary GUI bindings.
 
 #+BEGIN_QUOTE
-There is a large number of GUI libraries for Haskell. Unfortunately there is no
+"There is a large number of GUI libraries for Haskell. Unfortunately there is no
 standard one and all are more or less incomplete. In general, low-level veneers
 are going well, but they are low level. High-level abstractions are pretty
-experimental. There is a need for a supported medium-level GUI library.
+experimental. There is a need for a supported medium-level GUI library."
 
 -- cite:HaskellWikiGuiLibraries 
 #+END_QUOTE
@@ -601,10 +600,10 @@ also be confusing, especially for those who are only looking for a GUI library
 in Haskell and are unfamiliar with HTML and CSS.
 
 #+BEGIN_QUOTE
-You have all capabilities of HTML at your disposal when creating user
+"You have all capabilities of HTML at your disposal when creating user
 interfaces. This is a blessing, but it can also be a curse, so the library
 includes a few layout combinators to quickly create user interfaces without the
-need to deal with the mess that is CSS.
+need to deal with the mess that is CSS."
 
 -- cite:Threepenny-guiWiki
 #+END_QUOTE
@@ -632,10 +631,10 @@ elements should have sizes according to a certain ratio, or have elements wrap
 onto new lines if there is not enough space on the current line.
 
 #+BEGIN_QUOTE
-In the flex layout model, the children of a flex container can be laid out in
+"In the flex layout model, the children of a flex container can be laid out in
 any direction, and can “flex” their sizes, either growing to fill unused space
 or shrinking to avoid overflowing the parent. Both horizontal and vertical
-alignment of the children can be easily manipulated.
+alignment of the children can be easily manipulated."
 
 -- cite:atkins2013css 
 #+END_QUOTE
@@ -660,7 +659,7 @@ correct CSS properties to a parent element and its children elements. Figure
 [[fig:flex-ratio]] shows three elements in a ratio of 1:2:1; this is a responsive
 layout written with Flexbox, meaning that the ratio of the elements will be
 maintained on different screen sizes. The HTML code with the necessary CSS
-properties to achieve Figure [[fig:flex-ratio]] is shown in listing [[list:flex-ratio]],
+properties to achieve Figure [[fig:flex-ratio]] is shown in Listing [[list:flex-ratio]],
 note that some additional styling code is not shown.
 
 #+CAPTION: Three elements in ratio 1:2:1
@@ -684,7 +683,9 @@ of writing Flexbox CSS properties and converting them to the format expected by
 for common patterns. For more detail \tgf{}'s README is attached as an appendix.
 The code to achieve Figure [[fig:flex-ratio]] using \thp{} and \tgf{} instead of
 HTML is shown in listing [[list:flex-ratio-tgf]], again note that some additional
-styling code is not shown.
+styling code is not shown. \tgf{} is used in our \thp{} implementation of \utp{}
+to ensure the theory graph remains maintains the window's width and to ensure
+the theory graph nodes are centered, as shown in Figure [[fig:thp-utp-home]].
 
 #+CAPTION: \thp{} code for Figure [[fig:flex-ratio]]
 #+NAME: list:flex-ratio-tgf
@@ -771,10 +772,10 @@ located on another machine. When browsing a webpage served by a remote server
 the browser security feature that obfuscates file paths makes sense, it is a
 security concern to be sharing details of our filesystem with a remote server.
 Recalling from the background chapter on \thp{}, a \thp{} application uses a
-local server to serve the application as a webpage, see Figure [[][ and [[]]. In
-this case of browsing a webpage served by a local server the browser security
-feature does not make sense. We do not want to hide file paths from our own
-application.
+local server to serve the application as a webpage, see Figure
+[[fig:thp-life-cycle]] and [[fig:local-server]]. In this case of browsing a webpage
+served by a local server the browser security feature does not make sense. We do
+not want to hide file paths from our own application.
 
 # Remove the security feature.
 In order for a \thp{} application to receive the correct file path, the user
@@ -855,7 +856,8 @@ using Electron we can use Electron Packager to create a standalone application
 for the current platform e.g. ~.deb~ packages for Debian or ~.app~ bundles for
 macOS. The application produced is entirely standalone, including all necessary
 dependencies such as the binaries of Electron and our \thp{} application, which
-means it can be easily distributed.
+means it can be easily distributed. Instructions for creating standalone
+applications of our \thp{} implementation of \utp{} were added to its README.
 
 # TERM platform
 
@@ -870,7 +872,7 @@ first two steps of issue #111, it instructs users how to build and package
 in the pull request is included as an appendix.
 
 #+BEGIN_QUOTE
-Thanks a lot for this!
+"Thanks a lot for this!"
 
 -- cite:Threepenny-guiPR169
 #+END_QUOTE
@@ -952,9 +954,9 @@ not have to be concerned with elements depending on the data, we are no longer
 violating the Law of Demeter.
 
 #+BEGIN_QUOTE
-A remote part of the program may change the [element], and this "action at a
+"A remote part of the program may change the [element], and this "action at a
 distance" is not visible at the point where the counter is declared. In
-contrast, FRP specifies the whole dynamic behavior at the time of declaration
+contrast, FRP specifies the whole dynamic behavior at the time of declaration"
 
 -- cite:Threepenny-guiDesignWidgets
 #+END_QUOTE
@@ -1083,28 +1085,35 @@ pass in wxHaskell functions.
 
 *** \utp{}
 
-We explored the development of a second GUI for \utp{} using \thp{}. In doing so
-we made progress but still have some way to go. Building an entirely new GUI is
-a large undertaking and \thp{}'s youth really showed in the process. However
-some of the difficulty in building a second GUI for \utp{} using \thp{} was due
-to the tight integration of wxHaskell code in the existing \utp{} application.
-Given that \utp{} already has a working GUI, albeit with some rough edges, we
-believe that the fastest route to a polished \utp{} application is by resolving
-the issues in the existing \utp{} application.
+We explored the development of a second GUI for \utp{} using \thp{}. In this
+exploration we made some progress of building a second GUI for \utp{} but still
+have a lot to do. Notably we accomplished many of the core aspects of building a
+GUI, building a right-click menu, writing a responsive layout, implementing file
+and directory selection, and being able to create standalone applications. Where
+appropriate we contributed some of our accomplishments to the \thp{} respository
+or created a public library.
+
+Building an entirely new GUI is a large undertaking and \thp{}'s youth really
+showed in the process. However some of the difficulty in building a second GUI
+for \utp{} using \thp{} was due to the tight integration of wxHaskell code in
+the existing \utp{} application. Given that \utp{} already has a working GUI,
+albeit with some rough edges, we believe that the fastest route to a polished
+\utp{} application is by resolving the issues in the existing \utp{}
+application.
 
 *** \thp{}
 
 # Benefits.
 The \thp{} library has a lot of positive aspects to it, many of which arise due
-to \thp{}'s core idea of using the web browser as a display. By doing so, \thp{}
-does not need to rely on another library to provide support for displaying
-objects on-screen, in contrast with wxHaskell which depends on the C++ library
-wxWidgets. Another advantage of \thp{} using the web browser as a display is
-that we can leverage some of the many web development libraries that exist, such
-as Materialize which we used to build the white workspace selection prompt shown
-in Figure [[fig:thp-workspace-prompt]]. \thp{} also has built-in support for FRP, it
-is easy to install, and if you have familiarity with web technologies then it
-has quite a gentle learning curve.
+to \thp{}'s core idea of using the web browser as a display. By using the web
+browser as a display, \thp{} does not need to rely on another library to provide
+support for displaying objects on-screen, in contrast with wxHaskell which
+depends on the C++ library wxWidgets. Another advantage of \thp{} using the web
+browser as a display is that we can leverage some of the many web development
+libraries that exist, such as Materialize which we used to build the white
+workspace selection prompt shown in Figure [[fig:thp-workspace-prompt]]. \thp{} also
+has built-in support for FRP, it is easy to install, and if you have familiarity
+with web technologies then it has quite a gentle learning curve.
 
 # Disadvantages.
 However \thp{} is a young library, and as we discovered, some things which might
@@ -1139,6 +1148,28 @@ positive about \thp{}'s future.
 \appendix
 
 * Appendices
+
+** Code Produced
+
+The \thp{] implementation of \utp{} we produced can be found on GitHub at:
+
+https://github.com/andrewbutterfield/utp2/tree/feature/threepenny-gui
+
+Any interactions with the \thp{} repository, including pull requests and issues
+can be found on GitHub at:
+
+https://github.com/HeinrichApfelmus/threepenny-gui/issues?q=author%3Abarischj%20
+
+The \tgc{} library we produced can be found on GitHub at:
+
+https://github.com/barischj/threepenny-gui-contextmenu
+
+The \tgf{} library we produced can be found on GitHub (source) and Hackage
+(documentation) at:
+
+https://github.com/barischj/threepenny-gui-flexbox
+
+http://hackage.haskell.org/package/threepenny-gui-flexbox/docs/Graphics-UI-Threepenny-Ext-Flexbox.html
 
 ** Pull Requests and Issues
 
@@ -1180,6 +1211,8 @@ README of the Haskell package \tgf{}. Compiled from GitHub markdown to LaTeX
 using ~pandoc~.
 
 \ornamentbreak
+
+#+INCLUDE: "./threepenny-gui-contextmenu.org" :minlevel 3
 
 ** threepenny-gui-flexbox
 
