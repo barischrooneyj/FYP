@@ -26,8 +26,8 @@
   CLOSED: [2017-05-04 Thu 13:16]
 * DONE Proper Appendices
   CLOSED: [2017-05-02 Tue 18:48]
-* TODO Reflection section
+* DONE Reflection section
+  CLOSED: [2017-05-04 Thu 19:26]
 * TODO threepenny-gui-contextmenu README
-* TODO Laws display, capture keyboard input, add theory
 * TODO Save referenced webpages
 * TODO Save all code written

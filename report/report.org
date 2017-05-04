@@ -167,12 +167,13 @@ application XCode which on my machine weighs in at 10.46GB.
 
 A goal of Andrew Butterfield's (TODO cite) while developing \utp{} was to reach
 a point where standalone applications of \utp{} could be distributed e.g. ~.deb~
-packages for Debian or ~.app~ bundles for macOS, or if not native applications
-then at least executables. This proved difficult for the existing project as it
-was not being successfully built on macOS and was difficult to build on Linux,
-however executables for Windows do exist and are hosted on the project's
-homepage. At least on macOS the difficulties in building the project are largely
-related to wxHaskell, for reasons discussed in the previous section 2.2.
+packages for Debian or ~.app~ bundles for macOS, or if not standalone
+applications then at least executables. This proved difficult for the existing
+project as it was not being successfully built on macOS and was difficult to
+build on Linux, however executables for Windows do exist and are hosted on the
+project's homepage. At least on macOS the difficulties in building the project
+are largely related to wxHaskell, for reasons discussed in the previous section
+2.2.
 
 #+BEGIN_QUOTE
 Students at TCD have successfully built it on Linux (Ubuntu). It should run in
@@ -184,11 +185,11 @@ principle on Max OS X as well, but I have not been able to get this to work
 
 *** Conclusion
 
-In respect of the object oriented concepts exposed by the wxHaskell library, and
-the difficulty in building \utp{} and creating operating system native
-applications of \utp{} -- in both of which wxHaskell plays a role -- we decided
-to attempt building a GUI for \utp{} using an alternative GUI library, one we
-hoped would alleviate all of the problems associated with wxHaskell.
+In respect of the object oriented concepts exposed by the wxHaskell library, the
+difficulty in installing \utp{} and of creating standalone applications -- in
+both of which wxHaskell plays a role -- we decided to explore the building of a
+second GUI for \utp{} using an alternative GUI library, one we hoped would
+alleviate the problems associated with wxHaskell.
 
 ** A New Hope
 *** Haskell GUI Libraries
@@ -391,7 +392,7 @@ server is started, the server serves our \thp{} application at the address
 ~localhost:8000~ by default. We can visit this address in our browser to view
 our \thp{} application. When we visit ~localhost:8000~ in our browser a HTTP GET
 request is sent to the server and the server responds with an HTML file, this
-HTML doesn't yet contain any HTML describing our \thp{} application. This HTTP
+HTML does not yet contain any HTML describing our \thp{} application. This HTTP
 GET request and the response correspond to the first two arrows in our life
 cycle diagram.
 
@@ -484,7 +485,7 @@ propagation is most common. For example when a user clicks on an element a
 elements. JavaScript event handlers can be bound to elements, such that when an
 event propagates through an element it can trigger an event handler. This idea
 of event propagation and handling is very similar to the idea of exception
-propagation and capturing which is available in most programming languages.
+propagation and capturing which is found in most programming languages.
 
 #+CAPTION: Tree structure of a HTML document.
 #+NAME: fig:html-tree
@@ -934,19 +935,21 @@ on UI.valuechange selector $ \newWorkspace ->
 In the imperative style, when we write an element that depends on changing data
 e.g. Listing [[list:frp-depends-data]], we also write code to update that element
 wherever the data changes e.g. Listing [[list:frp-change-data]]. The code declaring
-the element and the code handling a change in the data may be in separate
+the element and the code handling a change to the data may be in separate
 modules, or at least separate to some degree. This separation is a violation of
 the Law of Demeter, cite:hunt2000pragmatic, which says we should minimize
 coupling between modules.
 
 # Reactive style.
 In the reactive style, when we write an element that depends on changing data we
-simply declare that it should have the /current/ value of the data, this data is
-held in some variable D. Now the code handling a change in the data, namely
-Listing [[list:frp-change-data]] simply updates D, any elements which depend on D
-will be updated automatically, see Figure [[fig:indirect-frp]]. Notably the code
-handling a change to the data does not have to be concerned with elements
-depending on the data, we are no longer violating the Law of Demeter.
+write the element in terms of the /current/ value of that data. When the value
+of the data changes over time our element will /react/ and update itself.
+Consider some element we have written in terms of data held in a variable D. Now
+the code handling a change to the data, such as Listing [[list:frp-change-data]],
+simply updates D. Any elements which depend on D will be updated automatically,
+see Figure [[fig:indirect-frp]]. Notably the code handling a change to the data does
+not have to be concerned with elements depending on the data, we are no longer
+violating the Law of Demeter.
 
 #+BEGIN_QUOTE
 A remote part of the program may change the [element], and this "action at a
@@ -957,13 +960,13 @@ contrast, FRP specifies the whole dynamic behavior at the time of declaration
 #+END_QUOTE
 
 # Summary.
-To summarise, functional reactive programming is preferable because when some
-data changes we don't have to worry about updating the elements that depend on
-the data directly. Instead we update the elements indirectly, by emitting a new
-value of the data which the elements then receive. By not updating the elements
-directly we are not violating the Law of Demeter.
+To summarise, functional reactive programming is preferable because when data
+changes we do not have to worry about updating the elements that depend on that
+data. Instead we update the elements indirectly, by emitting a new value of the
+data which the elements then receive. By not updating the elements directly we
+are not violating the Law of Demeter.
 
-#+CAPTION: With FRP we don't have to worry about updating element state.
+#+CAPTION: Using FRP we do not have to worry about updating elements.
 #+NAME: fig:indirect-frp
 #+ATTR_LATEX: :width 3.0in
 [[./images/indirect-frp-1.png]]
@@ -1023,7 +1026,7 @@ argument to our application.
 Writing such an AGL proved difficult because of the different architectures of
 wxHaskell and \thp{}. In particular we can wait for user input in wxHaskell,
 while in \thp{} we cannot, in \thp{} we have to provide a callback that is
-executed once the user provides input. This isn't really \thp{}'s fault, it is
+executed once the user provides input. This is not really \thp{}'s fault, it is
 because some \thp{} code is compiled to JavaScript which runs in the browser's
 event-loop, cite:swenson2013javascript. Because of the different architectures
 of wxHaskell and \thp{}, it is difficult to capture some functionality with a
@@ -1078,46 +1081,58 @@ pass in wxHaskell functions.
 
 ** Conclusion
 
+*** \utp{}
+
+We explored the development of a second GUI for \utp{} using \thp{}. In doing so
+we made progress but still have some way to go. Building an entirely new GUI is
+a large undertaking and \thp{}'s youth really showed in the process. However
+some of the difficulty in building a second GUI for \utp{} using \thp{} was due
+to the tight integration of wxHaskell code in the existing \utp{} application.
+Given that \utp{} already has a working GUI, albeit with some rough edges, we
+believe that the fastest route to a polished \utp{} application is by resolving
+the issues in the existing \utp{} application.
+
 *** \thp{}
 
 # Benefits.
-\thp{} has benefits over other Haskell GUI libraries, benefits that primarily
-stem from \thp{}'s use of the web browser as a display. \thp{} is a standalone
-GUI library; in contrast with wxHaskell which depends on another GUI library,
-and not even a haskell library, but a C++ library. Another advantage of \thp{}
-using the web browser as a display is that we can leverage come of the many web
-development libraries that exist, such as MaterializeCSS which we used to build
-the white workspace selection prompt shown in Figure [[fig:thp-workspace-prompt]].
-Other benefits of \thp{} include: high level abstractions out-of-the box, it is
-easy to install, and if you have familiarity with web technologies then it has
-quite a gentle learning curve.
+The \thp{} library has a lot of positive aspects to it, many of which arise due
+to \thp{}'s core idea of using the web browser as a display. By doing so, \thp{}
+does not need to rely on another library to provide support for displaying
+objects on-screen, in contrast with wxHaskell which depends on the C++ library
+wxWidgets. Another advantage of \thp{} using the web browser as a display is
+that we can leverage some of the many web development libraries that exist, such
+as Materialize which we used to build the white workspace selection prompt shown
+in Figure [[fig:thp-workspace-prompt]]. \thp{} also has built-in support for FRP, it
+is easy to install, and if you have familiarity with web technologies then it
+has quite a gentle learning curve.
 
 # Disadvantages.
 However \thp{} is a young library, and as we discovered, some things which might
-be easy to accomplish in other GUI libraries were difficult with \thp{}. \thp{}
-does not provide support for building a right-click menu or a file selector.
-Building a right-click menu was problematic because web browsers have not yet
-implemented the respective specification, and implementing file selection was
-tough because of a browser security feature that obfuscates file paths. The
-difficulty in implementing these features stemmed from \thp{} using the web
-browser as a display. So, while \thp{} using the web browser as a display does
-provide the library with benefits it also presents issues.
+be easy to accomplish in other GUI libraries were difficult with \thp{}. Two of
+\thp{}'s shortcomings were a lack of support for building a right-click menu and
+a file selector. Building a right-click menu was problematic because web
+browsers have not yet implemented the respective specification, and implementing
+file selection was tough because of a browser security feature that obfuscates
+file paths. The difficulty in implementing these features stemmed from \thp{}
+using the web browser as a display. So, while \thp{} using the web browser as a
+display does provide the library with benefits it also creates issues.
 
-# Young library, small issues, maintainable.
-It would be unusual for a young library to have issues. Importantly these issues
-are small enough to be overcome, as we did for the issues discovered in our
-project. Key to being able to address the issues was the moderately small size
-of \thp{}'s code base, the small size made it easy enough to understand \thp{}'s
-code, at least to the extent where we could write our own fixes when needed.
-\thp{}'s small size is essential for its maintainability, and if we are able to
-get involved and address issues then so can others. This low maintenance cost
-and the ability of user's to get involved improves \thp{}'s chances of survival
-and of growth in the jungle that is the Haskell GUI space, and is why we remain
-highly positive about \thp{}'s future.
+# Issues, though the community can help.
+It would be unusual for a young library like \thp{} not to have some issues.
+Importantly though, the issues we discovered we were able be overcome. Key to
+being able to address the issues was the reasonably small size of \thp{}'s code
+base. \thp{}'s small size meant we did not need to spend much time figuring out
+the code to reach the point where we could write our own fixes. This ability for
+the community to get involved reduces stress on the core maintainers and is key
+to the projects growth.
 
-*** Accomplishment
-
-
+# Maintainability and growth.
+In addition to enabling the community to get involved, \thp{}'s small size means
+it is highly maintainable. The combination of being highly maintainable and the
+ability of the community to get involved is why we believe \thp{} has a great
+chance of surviving to maturity and growing into a popular Haskell GUI library,
+which the Haskell GUI space is in need of. For these reasons we remain highly
+positive about \thp{}'s future.
 
 * LaTeX                                                              :ignore:
 
@@ -1159,8 +1174,11 @@ GitHub markdown to LaTeX using ~pandoc~.
 
 #+INCLUDE: "./pr169.org" :minlevel 3
 
-** TODO threepenny-gui-contextmenu
+** threepenny-gui-contextmenu
    
+README of the Haskell package \tgf{}. Compiled from GitHub markdown to LaTeX
+using ~pandoc~.
+
 \ornamentbreak
 
 ** threepenny-gui-flexbox
