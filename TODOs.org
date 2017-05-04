@@ -22,7 +22,8 @@
   CLOSED: [2017-05-01 Mon 20:25]
 * DONE Send to Andrew for feedback + UTP2 justification citation
   CLOSED: [2017-05-03 Wed 18:43]
-* TODO Integrating with existing code section
+* DONE Integrating with existing code section
+  CLOSED: [2017-05-04 Thu 13:16]
 * DONE Proper Appendices
   CLOSED: [2017-05-02 Tue 18:48]
 * TODO Reflection section

@@ -267,8 +267,9 @@ Reactive Programming (FRP) which is at the heart of \thp{}. FRP will be
 explained in more detail later on, for now it is sufficient to know that FRP is
 a style of programming which is very much in line with the functional
 programming ideology, of declarative high-level semantics. Heinrich Apfelmus is
-the author of a popular FRP library for Haskell named reactive-banana. Apfelmus
-created \thp{} to explore the application of FRP to building a GUI.
+the author of a popular FRP library for Haskell named Reactive-banana. He also
+authored \thp{} and uses it to explore the application of FRP to building a GUI,
+cite:Reactive-bananWiki.
 
 *** \thp{} for \utp{}
     
@@ -897,7 +898,7 @@ into a directory selector. Figure [[fig:thp-workspace-dir]] shows a directory
 selector in use in our \thp{} implementation of \utp{}, notice that files are
 grayed out.
 
-#+CAPTION: Workspace selection prompt in \utp{}.
+#+CAPTION: Workspace selection prompt in \utp{} implementation of \thp{}.
 #+NAME: fig:thp-workspace-prompt
 [[./images/workspace-select-1.png]]
 
@@ -977,8 +978,8 @@ in our \thp{} implementation of \utp{}, the single node is labeled "\_ROOT$0".
 The screenshot also shows the current workspace being displayed.
 
 # Implementation.
-This paragraph relates closely to Figure [[fig:indirect-frp]]. In each of these
-cases where we use FRP we have a variable, accessible application-wide, which
+This paragraph relates closely to Figure [[fig:indirect-frp]]. In each of the cases
+where we use FRP, we have a variable that is accessible application-wide, which
 represents the data over time. In the workspace directory's case the data is a
 string, in the theory graph's case it is a tree structure. Whenever a new value
 of the data is computed somewhere in the application, usually due to user input,
@@ -1029,9 +1030,6 @@ of wxHaskell and \thp{}, it is difficult to capture some functionality with a
 generic function.
  
 *** Integration with Existing \utp{}
-    :LOGBOOK:
-    CLOCK: [2017-05-03 Wed 19:41]--[2017-05-03 Wed 20:06] =>  0:25
-    :END:
    
 # Need for existing functions.
 Since writing an abstract GUI layer proved difficult we attempted instead to
@@ -1070,25 +1068,56 @@ a function like ~startupFileHandling~ in our \thp{} application. To use
 to a function that we provide as an argument to ~startupFileHandling~. This is
 depicted in Figure [[fig:startup-GI]] and should be contrasted with Figure
 [[fig:startup-tree]]. With this rewrite, ~startupFileHandling~ is now GUI library
-independent, to use ~startupFileHandling~ in our \thp{} application we pass in
+independent. To use ~startupFileHandling~ in our \thp{} application we pass in
 \thp{} functions as arguments, to use it in the existing \utp{} application we
 pass in wxHaskell functions.
 
-#+CAPTION: Making Figure [[fig:startup-tree]] GUI library independent.
+#+CAPTION: Making the functions in Figure [[fig:startup-tree]] GUI library independent.
 #+NAME: fig:startup-GI
 [[./images/startup-GI.png]]
 
-* TODO Conclusion
+** Conclusion
 
-Paragraph on slow development loop where we compile, view changes, edit,
-re-compile... In contrast with modern web development where we can have
-hot-reloading of changed modules.
+*** \thp{}
 
-Paragraph on \thp{} being maintainable due to small code base, and solving
-problems of traditional GUI libraries. Strong future. Mention leveraging webdev
-libraries.
+# Benefits.
+\thp{} has benefits over other Haskell GUI libraries, benefits that primarily
+stem from \thp{}'s use of the web browser as a display. \thp{} is a standalone
+GUI library; in contrast with wxHaskell which depends on another GUI library,
+and not even a haskell library, but a C++ library. Another advantage of \thp{}
+using the web browser as a display is that we can leverage come of the many web
+development libraries that exist, such as MaterializeCSS which we used to build
+the white workspace selection prompt shown in Figure [[fig:thp-workspace-prompt]].
+Other benefits of \thp{} include: high level abstractions out-of-the box, it is
+easy to install, and if you have familiarity with web technologies then it has
+quite a gentle learning curve.
 
-Paragraph on goal accomplishment.
+# Disadvantages.
+However \thp{} is a young library, and as we discovered, some things which might
+be easy to accomplish in other GUI libraries were difficult with \thp{}. \thp{}
+does not provide support for building a right-click menu or a file selector.
+Building a right-click menu was problematic because web browsers have not yet
+implemented the respective specification, and implementing file selection was
+tough because of a browser security feature that obfuscates file paths. The
+difficulty in implementing these features stemmed from \thp{} using the web
+browser as a display. So, while \thp{} using the web browser as a display does
+provide the library with benefits it also presents issues.
+
+# Young library, small issues, maintainable.
+It would be unusual for a young library to have issues. Importantly these issues
+are small enough to be overcome, as we did for the issues discovered in our
+project. Key to being able to address the issues was the moderately small size
+of \thp{}'s code base, the small size made it easy enough to understand \thp{}'s
+code, at least to the extent where we could write our own fixes when needed.
+\thp{}'s small size is essential for its maintainability, and if we are able to
+get involved and address issues then so can others. This low maintenance cost
+and the ability of user's to get involved improves \thp{}'s chances of survival
+and of growth in the jungle that is the Haskell GUI space, and is why we remain
+highly positive about \thp{}'s future.
+
+*** Accomplishment
+
+
 
 * LaTeX                                                              :ignore:
 
