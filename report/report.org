@@ -551,6 +551,8 @@ included as an appendix.
 #+NAME: fig:right-click-thp-utp
 [[./images/right-click-threepenny-utp.png]]
 
+\pagebreak
+
 *** Feasibility 
 
 Implementing \tgc{} was not straightforward, even after ~UI.contextmenu~ had
