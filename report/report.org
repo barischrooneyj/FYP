@@ -1151,25 +1151,26 @@ positive about \thp{}'s future.
 
 ** Code Produced
 
-The \thp{] implementation of \utp{} we produced can be found on GitHub at:
+All code is online on GitHub. Some repositories do not only contain our code, to
+distinguish the code it is necessary to view commit history or use GitHub's
+blame tool.
+
+The \thp{} implementation of \utp{} produced can be found on GitHub at:
 
 https://github.com/andrewbutterfield/utp2/tree/feature/threepenny-gui
 
-Any interactions with the \thp{} repository, including pull requests and issues
-can be found on GitHub at:
+Interactions with the \thp{} repository, including pull requests and issues can
+be found on GitHub at:
 
-https://github.com/HeinrichApfelmus/threepenny-gui/issues?q=author%3Abarischj%20
+https://github.com/HeinrichApfelmus/threepenny-gui/issues?q=author%3Abarischj
 
-The \tgc{} library we produced can be found on GitHub at:
+The \tgc{} library (right-click menus for \thp{}) produced can be found at:
 
 https://github.com/barischj/threepenny-gui-contextmenu
 
-The \tgf{} library we produced can be found on GitHub (source) and Hackage
-(documentation) at:
+The \tgf{} library (Flexbox combinators for \thp{}) produced can be found at:
 
 https://github.com/barischj/threepenny-gui-flexbox
-
-http://hackage.haskell.org/package/threepenny-gui-flexbox/docs/Graphics-UI-Threepenny-Ext-Flexbox.html
 
 ** Pull Requests and Issues
 
@@ -1205,7 +1206,7 @@ GitHub markdown to LaTeX using ~pandoc~.
 
 #+INCLUDE: "./pr169.org" :minlevel 3
 
-** threepenny-gui-contextmenu
+** \tgc{}
    
 README of the Haskell package \tgf{}. Compiled from GitHub markdown to LaTeX
 using ~pandoc~.
@@ -1214,7 +1215,7 @@ using ~pandoc~.
 
 #+INCLUDE: "./threepenny-gui-contextmenu.org" :minlevel 3
 
-** threepenny-gui-flexbox
+** \tgf{}
 
 README of the Haskell package \tgf{}. Compiled from GitHub markdown to LaTeX
 using ~pandoc~.
