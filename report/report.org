@@ -1141,9 +1141,9 @@ to the projects growth.
 In addition to enabling the community to get involved, \thp{}'s small size means
 it is highly maintainable. The combination of being highly maintainable and the
 ability of the community to get involved is why we believe \thp{} has a great
-chance of surviving to maturity and growing into a popular Haskell GUI library,
-which the Haskell GUI space is in need of. For these reasons we remain highly
-positive about \thp{}'s future.
+chance of eventually becoming a mature and popular Haskell GUI library, which
+the Haskell GUI space is in need of. For these reasons we remain highly positive
+about \thp{}'s future.
 
 * LaTeX                                                              :ignore:
 
