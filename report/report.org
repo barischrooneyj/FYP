@@ -72,10 +72,14 @@ bindings to wxWidgets.
 
 In wxWidgets inheritance is used to describe the type of many components. For
 example a button in wxWidgets has a type ~wxButton~ but it has many layers of
-inheritance as you can see in the image below. Because wxHaskell is a wrapper
-around wxWidgets some concepts from wxWidgets appear in wxHaskell, in the case
-of a button its type in wxHaskell is ~Window (CControl (CButton ()))~ which
-encodes some of the inheritance relationship.
+inheritance as can be seen in Figure [[fig:wxbutton]]. Because wxHaskell is a
+wrapper around wxWidgets some concepts from wxWidgets appear in wxHaskell, in
+the case of a button its type in wxHaskell is ~Window (CControl (CButton ()))~
+which encodes some of the inheritance relationship.
+
+#+CAPTION: Inheritance diagram for wxButton, cite:wxButtonClassReference.
+#+NAME: fig:wxbutton
+[[./images/wxbutton.png]]
 
 wxHaskell consists of four key libraries, only two of which are typically used
 by a wxHaskell programmer. The lesser used of these is wxcore which provides
@@ -126,9 +130,9 @@ example if library-a requires library-c > 0.7 but library-b requires library-c <
 0.7 then we have a dependency conflict since no version of library-c can satisfy
 both conditions. You might end up changing the version of library-a to a
 previous version that requires library-c 0.6 which then satisfies both
-conditions, however, now library-a also requires library-d 0.5 but library-c
-requires library-d > 0.6. This endless cycle of fixing dependency conflicts is
-commonly referred to as Cabal hell.
+conditions, however, now library-a might require library-d 0.5 and library-c
+might require library-d > 0.6, another conflict. This endless cycle of fixing
+dependency conflicts is commonly referred to as Cabal hell.
 
 The Haskell tool Stack solves Cabal hell by providing sets of libraries which
 are guaranteed to work together without dependency conflicts. These sets of
@@ -166,13 +170,12 @@ platform due to their not being a well-established C++ package manager.
 Furthermore, on macOS, installing wxWidgets requires an install of the
 application XCode which on my machine weighs in at 10.46GB.
 
-*** Difficult to Package
-
 To distribute \utp{} it would be beneficial to be able to produce a standalone
 application e.g. a ~.deb~ package for Debian or ~.app~ bundles for macOS, or if
 not standalone applications then at least executables. On macOS there were
 difficulties in building the project, largely related to wxHaskell for reasons
-discussed in the previous section 2.2.
+discussed in the previous section 2.2. If we can't build the project we can't
+package a standalone application.
 
 #+BEGIN_QUOTE
 "Students at TCD have successfully built it on Linux (Ubuntu). It should run in
@@ -202,7 +205,8 @@ falls into the first category, of bindings to an imperative library. Most of the
 more powerful GUI libraries fall into this category, because they can leverage
 the power of the imperative language they provide a binding to. Libraries in the
 second category, high-level libraries, tend to not provide GUI support directly
-but rely on a library like wxHaskell to provide the necessary GUI bindings.
+but rely on another Haskell library, such as wxHaskell, to provide the necessary
+GUI bindings.
 
 #+BEGIN_QUOTE
 "There is a large number of GUI libraries for Haskell. Unfortunately there is no
@@ -980,9 +984,9 @@ are not violating the Law of Demeter.
 # Where it is used.
 Functional reactive programming is used in our \thp{} implementation of \utp{}
 in two places. We use FRP to manage the current workspace directory and the
-theory graph. In Figure [[fig:thp-utp-home]], a single-node theory graph can be seen
-in our \thp{} implementation of \utp{}, the single node is labeled "\_ROOT$0".
-The screenshot also shows the current workspace being displayed.
+theory graph. Figure [[fig:thp-utp-home]] shows a single-node theory graph in our
+\thp{} implementation of \utp{}, the single node is labeled "\_ROOT$0". The
+screenshot also shows the current workspace being displayed.
 
 # Implementation.
 This paragraph relates closely to Figure [[fig:indirect-frp]]. In each of the cases
@@ -1022,7 +1026,7 @@ The set of generic GUI functions were first written as an interface, so the
 functions did not have an implementation, only their type signatures were
 declared. This interface could then be implemented for each GUI library we want
 the \utp{} application to support. The \utp{} application would be written using
-the generic functions of the interface, which GUI library implementation would
+the generic functions of the interface. Which GUI library implementation would
 actually be used would depend solely on which implementation we pass in as an
 argument to our application.
 
@@ -1153,9 +1157,9 @@ about \thp{}'s future.
 
 ** Code Produced
 
-All code is online on GitHub. Some repositories do not only contain our code, to
+All code is online on GitHub. Some repositories do not contain only our code, to
 distinguish the code it is necessary to view commit history or use GitHub's
-blame tool.
+blame tool. These repositories have also been saved to the provided CDs.
 
 The \thp{} implementation of \utp{} produced can be found on GitHub at:
 
@@ -1166,11 +1170,13 @@ be found on GitHub at:
 
 https://github.com/HeinrichApfelmus/threepenny-gui/issues?q=author%3Abarischj
 
-The \tgc{} library (right-click menus for \thp{}) produced can be found at:
+The \tgc{} library (right-click menus for \thp{}) produced can be found on
+GitHub at:
 
 https://github.com/barischj/threepenny-gui-contextmenu
 
-The \tgf{} library (Flexbox combinators for \thp{}) produced can be found at:
+The \tgf{} library (Flexbox combinators for \thp{}) produced can be found on
+GitHub at:
 
 https://github.com/barischj/threepenny-gui-flexbox
 

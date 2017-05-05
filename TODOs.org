@@ -28,6 +28,9 @@
   CLOSED: [2017-05-02 Tue 18:48]
 * DONE Reflection section
   CLOSED: [2017-05-04 Thu 19:26]
-* TODO threepenny-gui-contextmenu README
-* TODO Save referenced webpages
-* TODO Save all code written
+* DONE threepenny-gui-contextmenu README
+  CLOSED: [2017-05-05 Fri 10:16]
+* DONE Save all code written
+  CLOSED: [2017-05-05 Fri 10:16]
+* DONE Code is on CD
+  CLOSED: [2017-05-05 Fri 10:48]
